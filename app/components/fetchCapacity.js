@@ -2,28 +2,9 @@ import * as cheerio from "cheerio";
 import { Text, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native";
 
-// export default FetchCapacity = () => {
-//     var gymCapacityList = [];
-//     const renderItem = ({ item }) => (
-//         <View>
-//             <Text>{item.capacity}</Text>
-//         </View>
-//     );
-
-//     return (
-//         console.log(gymCapacityList),
-//         (
-//             <FlatList
-//                 horizontal={true}
-//                 data={gymCapacityList}
-//                 renderItem={renderItem}
-//                 showsHorizontalScrollIndicator={false}
-//             />
-//         )
-//     );
-// };
 var gymCapacityList = [];
 const FetchCapacityCall = async () => {
+    gymCapacityList = [];
     await fetch(
         "https://reboks.nus.edu.sg/nus_public_web/public/index.php/facilities/capacity",
         {
@@ -61,9 +42,8 @@ const FetchCapacityCall = async () => {
                 };
                 gymCapacityList.push(gymCapacity);
             });
-            console.log(gymCapacityList);
+            // console.log(gymCapacityList);
         });
 };
 
-// FetchCapacityCall();
 export { FetchCapacityCall, gymCapacityList };
