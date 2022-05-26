@@ -10,7 +10,6 @@ import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
-//test code 123
 function ExploreScreen() {
     return (
         <View
