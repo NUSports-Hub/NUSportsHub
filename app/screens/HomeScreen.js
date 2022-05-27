@@ -68,7 +68,7 @@ const upcomingEventData = [
     },
 ];
 
-export default function HomeScreen() {
+export default HomeScreen = () => {
     const test = () => {
         alert("hello");
     };
@@ -106,6 +106,8 @@ export default function HomeScreen() {
         return (
             <View
                 style={{
+                    alignSelf: "center",
+                    height: "90%",
                     width: 1,
                     backgroundColor: "#607D8B",
                 }}
@@ -117,7 +119,9 @@ export default function HomeScreen() {
         return (
             <View
                 style={{
+                    alignSelf: "center",
                     height: 1,
+                    width: "90%",
                     backgroundColor: "#607D8B",
                 }}
             />
@@ -216,7 +220,7 @@ export default function HomeScreen() {
             </View>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

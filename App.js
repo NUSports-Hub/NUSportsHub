@@ -9,7 +9,9 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
+import MainScreen from "./app/screens/BookingScreens/MainScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
+import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 
 function ExploreScreen() {
     return (
@@ -17,16 +19,6 @@ function ExploreScreen() {
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
             <Text>Explore!</Text>
-        </View>
-    );
-}
-
-function BookingsScreen() {
-    return (
-        <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-            <Text>Bookings!</Text>
         </View>
     );
 }
@@ -84,8 +76,9 @@ function Home() {
             />
             <Tab.Screen
                 name="Bookings"
-                component={BookingsScreen}
+                component={BookingsNavigator}
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="book"
@@ -127,6 +120,7 @@ function App() {
                     "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
                     "Montserrat-Medium": require("./assets/fonts/Montserrat-Bold.ttf"),
                     "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+                    "Montserrat-ExtraBold": require("./assets/fonts/Montserrat-ExtraBold.ttf"),
                 });
                 await FetchCapacityCall();
             } catch (e) {
@@ -148,8 +142,16 @@ function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-                <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Login"
+                    component={LoginScreen}
+                />
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="HomeScreen"
+                    component={Home}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
