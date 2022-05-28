@@ -23,7 +23,11 @@ export default SelectActivityScreen = () => {
 
 const styles = StyleSheet.create({
     container: {},
-    activityRow: { flexDirection: "row", justifyContent: "space-evenly" },
+    activityRow: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        marginBottom: 15,
+    },
     header: {
         backgroundColor: "white",
         flex: 1,

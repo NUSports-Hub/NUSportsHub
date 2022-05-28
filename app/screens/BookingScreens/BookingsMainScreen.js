@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-export default MainScreen = () => {
+export default BookingsMainScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
@@ -14,13 +14,13 @@ export default MainScreen = () => {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.bookingWrapper}>
+            <View
+                style={[styles.bookingWrapper, { backgroundColor: "#0C3370" }]}
+            >
                 <TouchableOpacity
                     onPress={() => navigation.navigate("SelectActivityScreen")}
                 >
-                    <Text style={[styles.buttonText, { color: "black" }]}>
-                        Make a new booking
-                    </Text>
+                    <Text style={styles.buttonText}>Make a new booking</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
     },
     bookingWrapper: {
-        borderWidth: 5,
+        borderWidth: 3,
         borderRadius: 20,
         justifyContent: "center",
         marginHorizontal: 30,

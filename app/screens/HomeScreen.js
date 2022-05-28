@@ -10,7 +10,7 @@ import {
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native";
 import AddItem from "../components/addItem";
-import UserEvent from "../components/event";
+import UserBooking from "../components/booking";
 import { FlatList } from "react-native";
 import { gymCapacityList } from "../components/fetchCapacity";
 import FacilityCapacity from "../components/capacity";
@@ -30,7 +30,7 @@ const userFavouritesData = [
         favouriteName: "Volleyball",
     },
 ];
-const upcomingEventData = [
+const upcomingBookingData = [
     {
         dateDay: "15",
         dateMonth: "May",
@@ -72,8 +72,8 @@ export default HomeScreen = () => {
     const test = () => {
         alert("hello");
     };
-    const renderEvent = ({ item }) => (
-        <UserEvent
+    const renderBooking = ({ item }) => (
+        <UserBooking
             dateDay={item.dateDay}
             dateMonth={item.dateMonth}
             title={item.title}
@@ -115,7 +115,7 @@ export default HomeScreen = () => {
         );
     };
 
-    const eventDivider = () => {
+    const bookingDivider = () => {
         return (
             <View
                 style={{
@@ -142,7 +142,7 @@ export default HomeScreen = () => {
             <View style={styles.componentHeader}>
                 <View style={styles.componentHeaderLabel}>
                     <Text style={styles.componentText}>
-                        Your upcoming events
+                        Your upcoming bookings
                     </Text>
                     <MaterialCommunityIcons
                         name="calendar"
@@ -156,9 +156,9 @@ export default HomeScreen = () => {
             </View>
             <SafeAreaView style={styles.wrapper}>
                 <FlatList
-                    ItemSeparatorComponent={eventDivider}
-                    data={upcomingEventData}
-                    renderItem={renderEvent}
+                    ItemSeparatorComponent={bookingDivider}
+                    data={upcomingBookingData}
+                    renderItem={renderBooking}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={emptyComponent}
                 />
@@ -211,7 +211,7 @@ export default HomeScreen = () => {
             </View>
             <View style={styles.wrapper}>
                 <FlatList
-                    ItemSeparatorComponent={eventDivider}
+                    ItemSeparatorComponent={bookingDivider}
                     data={userFavouritesData}
                     renderItem={renderFavourites}
                     showsVerticalScrollIndicator={false}

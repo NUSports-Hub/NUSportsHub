@@ -1,15 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import BookingsMainScreen from "./BookingsMainScreen";
-import SelectActivityScreen from "./SelectActivityScreen";
+import ExploreMainScreen from "./ExploreMainScreen";
+import EventDetailScreen from "./EventDetailScreen";
 const Stack = createStackNavigator();
 
-export default BookingsNavigator = () => {
+export default ExploreNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name="BookingsMainScreen"
-                component={BookingsMainScreen}
+                name="ExploreMainScreen"
+                component={ExploreMainScreen}
             />
             <Stack.Screen
                 options={{
@@ -24,8 +24,8 @@ export default BookingsNavigator = () => {
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                 }}
-                name="SelectActivityScreen"
-                component={SelectActivityScreen}
+                name="EventDetailScreen"
+                component={EventDetailScreen}
             />
         </Stack.Navigator>
     );
