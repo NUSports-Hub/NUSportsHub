@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
+import ProfileScreen from "./app/screens/ProfileScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
@@ -19,16 +20,6 @@ function ExploreScreen() {
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
             <Text>Explore!</Text>
-        </View>
-    );
-}
-
-function ProfileScreen() {
-    return (
-        <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-            <Text>Profile!</Text>
         </View>
     );
 }
@@ -99,6 +90,17 @@ function Home() {
                 name="Profile"
                 component={ProfileScreen}
                 options={{
+                    headerShown: true,
+                    headerLeft: null,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+                    headerTitle: "Profile",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="account"
