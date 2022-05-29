@@ -9,10 +9,10 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
-import MainScreen from "./app/screens/BookingScreens/MainScreen.js";
 import ProfileScreen from "./app/screens/ProfileScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
+import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
 
 function ExploreScreen() {
     return (
@@ -54,8 +54,15 @@ function Home() {
             />
             <Tab.Screen
                 name="Explore"
-                component={ExploreScreen}
+                component={ExploreNavigator}
                 options={{
+                    headerShown: false,
+                    // headerTintColor: "white",
+                    // headerStyle: { backgroundColor: "#0C3370" },
+                    // headerTitleAlign: "center",
+                    // headerTitleStyle: {
+                    //     fontFamily: "Montserrat-Bold",
+                    // },
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="earth"
@@ -119,6 +126,7 @@ function App() {
                 await SplashScreen.preventAutoHideAsync();
                 // Pre-load fonts, make any API calls you need to do here
                 await Font.loadAsync({
+                    "Montserrat-Regular": require("./assets/fonts/Montserrat-Regular.ttf"),
                     "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
                     "Montserrat-Medium": require("./assets/fonts/Montserrat-Bold.ttf"),
                     "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),

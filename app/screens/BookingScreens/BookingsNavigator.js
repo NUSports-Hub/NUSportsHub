@@ -1,6 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import MainScreen from "./MainScreen";
+import BookingsMainScreen from "./BookingsMainScreen";
 import SelectActivityScreen from "./SelectActivityScreen";
 const Stack = createStackNavigator();
 
@@ -9,8 +8,8 @@ export default BookingsNavigator = () => {
         <Stack.Navigator>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name="MainScreen"
-                component={MainScreen}
+                name="BookingsMainScreen"
+                component={BookingsMainScreen}
             />
             <Stack.Screen
                 options={{

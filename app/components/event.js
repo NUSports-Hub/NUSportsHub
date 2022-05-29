@@ -1,61 +1,49 @@
-import { useState } from "react";
-import { Text, StyleSheet, View, Dimensions } from "react-native";
-
+import { Text, StyleSheet, View, Dimensions, Image } from "react-native";
+import placeholderImage from "../../assets/placeholderImage.jpg";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 export default UserEvent = (props) => {
+    const navigation = useNavigation();
     return (
-        <View style={styles.eventContainer}>
-            <View style={styles.eventDateWrapper}>
-                <Text style={styles.eventDateDay}>{props.dateDay}</Text>
-                <Text style={styles.eventDateMonth}>{props.dateMonth}</Text>
+        <TouchableOpacity
+            onPress={() => navigation.navigate("EventDetailScreen")}
+        >
+            <View style={[styles.eventWrapper, styles.elevation]}>
+                <Image source={placeholderImage} style={styles.image} />
+                <Text style={styles.eventName}>{props.name}</Text>
+                <Text style={styles.eventDate}>{props.date}</Text>
             </View>
-            <View style={styles.eventDetailsWrapper}>
-                <Text style={styles.eventTitle}>{props.title}</Text>
-                <Text style={styles.eventDescription}>
-                    {props.descriptionTime}
-                </Text>
-                <Text style={styles.eventDescription}>
-                    {props.descriptionLocation}
-                </Text>
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
-const { height } = Dimensions.get("window");
-
+const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
-    eventContainer: {
-        flexDirection: "row",
-        padding: 5,
-        alignItems: "center",
-        height: 0.11 * height,
+    eventWrapper: {
+        width: 0.43 * width,
+        height: 0.33 * height,
+        marginVertical: 15,
+        marginHorizontal: 10,
+        padding: 15,
+        borderRadius: 5,
+        backgroundColor: "#EEEEEE",
     },
-    eventDateWrapper: {
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 10,
+    image: {
+        height: 50,
+        width: 0.3 * width,
     },
-    eventDetailsWrapper: {
-        margin: 5,
-    },
-    eventDateDay: {
-        fontFamily: "Montserrat-Bold",
-        fontSize: 20,
-        color: "white",
-    },
-    eventDateMonth: {
+    eventName: {
         fontFamily: "Montserrat-Bold",
         fontSize: 15,
-        color: "white",
+        paddingTop: 10,
     },
-    eventTitle: {
-        fontFamily: "Montserrat-SemiBold",
-        fontSize: 18,
-        color: "white",
+    eventDate: {
+        fontFamily: "Montserrat-Regular",
+        paddingTop: 10,
+        color: "#FF6D03",
     },
-    eventDescription: {
-        fontFamily: "Montserrat-Medium",
-        fontSize: 12,
-        color: "#BBBBBB",
+    elevation: {
+        elevation: 5,
+        shadowColor: "black",
     },
 });

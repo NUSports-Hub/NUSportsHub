@@ -17,13 +17,13 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#0C3370",
-        borderWidth: 1,
-        borderRadius: 15,
+        borderRadius: 5,
         margin: 5,
         padding: 5,
         alignItems: "center",
         justifyContent: "center",
         width: 0.27 * width,
+        elevation: 10,
     },
     activityText: {
         fontFamily: "Montserrat-Bold",
