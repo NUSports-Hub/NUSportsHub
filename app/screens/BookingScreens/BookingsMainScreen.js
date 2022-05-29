@@ -33,12 +33,13 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
     },
     bookingWrapper: {
-        borderWidth: 3,
         borderRadius: 20,
         justifyContent: "center",
         marginHorizontal: 30,
         flex: 0.5,
         marginVertical: 30,
+        elevation: 10,
+        shadowColor: "black",
     },
     buttonText: {
         fontFamily: "Montserrat-ExtraBold",

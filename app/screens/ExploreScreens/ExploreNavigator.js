@@ -7,7 +7,19 @@ export default ExploreNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: true,
+                    headerLeft: null,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+                    headerTitle: "Explore",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                }}
                 name="ExploreMainScreen"
                 component={ExploreMainScreen}
             />
@@ -17,7 +29,7 @@ export default ExploreNavigator = () => {
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },
-                    headerTitle: "Bookings",
+                    headerTitle: "Explore",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },

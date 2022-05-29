@@ -65,13 +65,13 @@ function Home() {
                 name="Explore"
                 component={ExploreNavigator}
                 options={{
-                    headerShown: true,
-                    headerTintColor: "white",
-                    headerStyle: { backgroundColor: "#0C3370" },
-                    headerTitleAlign: "center",
-                    headerTitleStyle: {
-                        fontFamily: "Montserrat-Bold",
-                    },
+                    headerShown: false,
+                    // headerTintColor: "white",
+                    // headerStyle: { backgroundColor: "#0C3370" },
+                    // headerTitleAlign: "center",
+                    // headerTitleStyle: {
+                    //     fontFamily: "Montserrat-Bold",
+                    // },
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="earth"

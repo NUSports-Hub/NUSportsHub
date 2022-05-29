@@ -1,5 +1,8 @@
 import { View, Text, StyleSheet, StatusBar, TextInput } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import {
+    getFocusedRouteNameFromRoute,
+    useNavigation,
+} from "@react-navigation/native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import UserEvent from "../../components/event";
@@ -45,7 +48,6 @@ const renderEvent = ({ item }) => (
 );
 
 export default ExploreMainScreen = () => {
-    const navigation = useNavigation();
     return (
         <View>
             <View style={styles.searchContainer}>
