@@ -10,6 +10,7 @@ export default UserFavourites = (props) => {
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons
+                style={styles.icon}
                 name={props.iconName}
                 color={"white"}
                 size={35}
@@ -31,13 +32,17 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 0.11 * height,
     },
+    icon: {
+        marginLeft: 10,
+    },
     favouriteName: {
         fontFamily: "Montserrat-Bold",
         color: "white",
         fontSize: 18,
     },
     bookButtonText: {
-        borderRadius: 20,
+        marginRight: 10,
+        borderRadius: 10,
         padding: 10,
         color: "white",
         fontSize: 13,

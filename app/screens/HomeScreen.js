@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native";
 import AddItem from "../components/addItem";
 import UserBooking from "../components/booking";
 import { FlatList } from "react-native";
-import { gymCapacityList } from "../components/fetchCapacity";
+import { capacityList } from "../components/fetchCapacity";
 import FacilityCapacity from "../components/capacity";
 import { FetchCapacityCall } from "../components/fetchCapacity.js";
 import UserFavourites from "../components/favourites";
@@ -133,7 +133,7 @@ export default HomeScreen = () => {
         //set isRefreshing to true
         setRefreshing(true);
         await FetchCapacityCall();
-        console.log(gymCapacityList);
+        console.log(capacityList);
         setRefreshing(false);
     };
 
@@ -191,7 +191,7 @@ export default HomeScreen = () => {
                     <FlatList
                         ItemSeparatorComponent={capacityDivider}
                         horizontal={true}
-                        data={gymCapacityList}
+                        data={capacityList}
                         renderItem={renderCapacity}
                         showsHorizontalScrollIndicator={false}
                         refreshing={refreshing}

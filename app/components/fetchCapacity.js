@@ -2,9 +2,9 @@ import * as cheerio from "cheerio";
 import { Text, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native";
 
-var gymCapacityList = [];
+var capacityList = [];
 const FetchCapacityCall = async () => {
-    gymCapacityList = [];
+    capacityList = [];
     await fetch(
         "https://reboks.nus.edu.sg/nus_public_web/public/index.php/facilities/capacity",
         {
@@ -40,10 +40,19 @@ const FetchCapacityCall = async () => {
                     name: facilityName,
                     capacity: facilityCapacity,
                 };
-                gymCapacityList.push(gymCapacity);
+                capacityList.push(gymCapacity);
+            });
+            poolData.each(function (index, element) {
+                const facilityName = $(element).children("span").text();
+                const facilityCapacity = $(element).children("b").text();
+                const poolCapacity = {
+                    name: facilityName,
+                    capacity: facilityCapacity,
+                };
+                capacityList.push(poolCapacity);
             });
             // console.log(gymCapacityList);
         });
 };
 
-export { FetchCapacityCall, gymCapacityList };
+export { FetchCapacityCall, capacityList };
