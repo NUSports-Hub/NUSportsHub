@@ -10,9 +10,9 @@ import {
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native";
 import AddItem from "../components/addItem";
-import UserEvent from "../components/event";
+import UserBooking from "../components/booking";
 import { FlatList } from "react-native";
-import { gymCapacityList } from "../components/fetchCapacity";
+import { capacityList } from "../components/fetchCapacity";
 import FacilityCapacity from "../components/capacity";
 import { FetchCapacityCall } from "../components/fetchCapacity.js";
 import UserFavourites from "../components/favourites";
@@ -30,7 +30,7 @@ const userFavouritesData = [
         favouriteName: "Volleyball",
     },
 ];
-const upcomingEventData = [
+const upcomingBookingData = [
     {
         dateDay: "15",
         dateMonth: "May",
@@ -68,12 +68,12 @@ const upcomingEventData = [
     },
 ];
 
-export default function HomeScreen() {
+export default HomeScreen = () => {
     const test = () => {
         alert("hello");
     };
-    const renderEvent = ({ item }) => (
-        <UserEvent
+    const renderBooking = ({ item }) => (
+        <UserBooking
             dateDay={item.dateDay}
             dateMonth={item.dateMonth}
             title={item.title}
@@ -106,6 +106,8 @@ export default function HomeScreen() {
         return (
             <View
                 style={{
+                    alignSelf: "center",
+                    height: "90%",
                     width: 1,
                     backgroundColor: "#607D8B",
                 }}
@@ -113,11 +115,13 @@ export default function HomeScreen() {
         );
     };
 
-    const eventDivider = () => {
+    const bookingDivider = () => {
         return (
             <View
                 style={{
+                    alignSelf: "center",
                     height: 1,
+                    width: "90%",
                     backgroundColor: "#607D8B",
                 }}
             />
@@ -129,7 +133,7 @@ export default function HomeScreen() {
         //set isRefreshing to true
         setRefreshing(true);
         await FetchCapacityCall();
-        console.log(gymCapacityList);
+        console.log(capacityList);
         setRefreshing(false);
     };
 
@@ -138,7 +142,7 @@ export default function HomeScreen() {
             <View style={styles.componentHeader}>
                 <View style={styles.componentHeaderLabel}>
                     <Text style={styles.componentText}>
-                        Your upcoming events
+                        Your upcoming bookings
                     </Text>
                     <MaterialCommunityIcons
                         name="calendar"
@@ -152,9 +156,9 @@ export default function HomeScreen() {
             </View>
             <SafeAreaView style={styles.wrapper}>
                 <FlatList
-                    ItemSeparatorComponent={eventDivider}
-                    data={upcomingEventData}
-                    renderItem={renderEvent}
+                    ItemSeparatorComponent={bookingDivider}
+                    data={upcomingBookingData}
+                    renderItem={renderBooking}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={emptyComponent}
                 />
@@ -187,7 +191,7 @@ export default function HomeScreen() {
                     <FlatList
                         ItemSeparatorComponent={capacityDivider}
                         horizontal={true}
-                        data={gymCapacityList}
+                        data={capacityList}
                         renderItem={renderCapacity}
                         showsHorizontalScrollIndicator={false}
                         refreshing={refreshing}
@@ -207,7 +211,7 @@ export default function HomeScreen() {
             </View>
             <View style={styles.wrapper}>
                 <FlatList
-                    ItemSeparatorComponent={eventDivider}
+                    ItemSeparatorComponent={bookingDivider}
                     data={userFavouritesData}
                     renderItem={renderFavourites}
                     showsVerticalScrollIndicator={false}
@@ -216,7 +220,7 @@ export default function HomeScreen() {
             </View>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
