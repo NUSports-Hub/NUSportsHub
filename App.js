@@ -13,6 +13,7 @@ import ProfileScreen from "./app/screens/ProfileScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
+import { supabase } from "./supabase.js";
 
 function ExploreScreen() {
     return (
@@ -57,12 +58,6 @@ function Home() {
                 component={ExploreNavigator}
                 options={{
                     headerShown: false,
-                    // headerTintColor: "white",
-                    // headerStyle: { backgroundColor: "#0C3370" },
-                    // headerTitleAlign: "center",
-                    // headerTitleStyle: {
-                    //     fontFamily: "Montserrat-Bold",
-                    // },
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="earth"
@@ -119,7 +114,14 @@ const Stack = createStackNavigator();
 
 function App() {
     const [appIsReady, setAppIsReady] = useState(false);
+    const [session, setSession] = useState(null);
     useEffect(() => {
+        setSession(supabase.auth.session());
+
+        supabase.auth.onAuthStateChange((_event, session) => {
+            console.log(session);
+            setSession(session);
+        });
         async function prepare() {
             try {
                 // Keep the splash screen visible while we fetch resources
@@ -137,32 +139,35 @@ function App() {
                 console.warn(e);
             } finally {
                 // Tell the application to render
+                console.log("APP IS READY");
                 setAppIsReady(true);
                 await SplashScreen.hideAsync();
             }
         }
-
         prepare();
     }, []);
-
     if (!appIsReady) {
         return null;
     }
-
+    // return (
+    //     <NavigationContainer>
+    //         <Stack.Navigator>
+    //             <Stack.Screen
+    //                 options={{ headerShown: false }}
+    //                 name="Login"
+    //                 component={LoginScreen}
+    //             />
+    //             <Stack.Screen
+    //                 options={{ headerShown: false }}
+    //                 name="HomeScreen"
+    //                 component={Home}
+    //             />
+    //         </Stack.Navigator>
+    //     </NavigationContainer>
+    // );
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="Login"
-                    component={LoginScreen}
-                />
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="HomeScreen"
-                    component={Home}
-                />
-            </Stack.Navigator>
+            {session ? <Home /> : <LoginScreen />}
         </NavigationContainer>
     );
 }

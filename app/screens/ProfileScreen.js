@@ -1,7 +1,11 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, Image, StyleSheet, Button } from "react-native";
+import { TouchableOpacity } from "react-native";
 import userProfile from "../../assets/userProfile.png";
+import { supabase } from "../../supabase";
 export default ProfileScreen = () => {
+    async function signOut() {
+        const { error } = await supabase.auth.signOut();
+    }
     return (
         <View style={styles.container}>
             <Image
@@ -36,6 +40,7 @@ export default ProfileScreen = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: "#FF6D03" }]}
+                    onPress={signOut}
                 >
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
