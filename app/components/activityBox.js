@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         width: 0.27 * width,
-        elevation: 10,
     },
     activityText: {
         fontFamily: "Montserrat-Bold",
