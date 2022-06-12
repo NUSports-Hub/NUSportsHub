@@ -110,12 +110,13 @@ export default LoginScreen = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
-                        if (email.includes("u.nus.edu")) {
-                            signInWithEmail();
-                        } else {
-                            setErrorMessage("");
-                            setErrorMessage("Please input a valid NUS email");
-                        }
+                        // if (email.includes("u.nus.edu")) {
+                        //     signInWithEmail();
+                        // } else {
+                        //     setErrorMessage("");
+                        //     setErrorMessage("Please input a valid NUS email");
+                        // }
+                        signInWithEmail();
                     }}
                     style={styles.button}
                 >
