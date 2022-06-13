@@ -9,7 +9,7 @@ import {
 export default BookingTiming = (props) => {
     const backgroundColor = props.backgroundColor;
     return (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
             <View
                 style={[styles.container, { backgroundColor: backgroundColor }]}
             >
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: "black",
         paddingLeft: 15,
+        width: 0.15 * width,
     },
     bookingTitle: {
         fontFamily: "Montserrat-Bold",

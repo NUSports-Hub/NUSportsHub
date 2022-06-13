@@ -11,13 +11,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native";
 import BookingTiming from "../../components/bookingTiming";
+import {
+    FetchLoginTreeckle,
+    accessToken,
+} from "../../components/fetchLoginTreeckle";
 const { width, height } = Dimensions.get("window");
+FetchLoginTreeckle();
 export default SelectTimeScreen = (props) => {
-    const [date, setDate] = useState(new Date());
-    const [mode, setMode] = useState("date");
-    const [show, setShow] = useState(false);
-    const [bookingData, setBookingData] = useState([]);
-    const [selectedTiming, setSelectedTiming] = useState([]);
     const bookingTemplate = [
         // {
         //     time: "0000",
@@ -308,14 +308,18 @@ export default SelectTimeScreen = (props) => {
             bookerEmail: "",
         },
     ];
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState("date");
+    const [show, setShow] = useState(false);
+    const [bookingData, setBookingData] = useState([]);
+    const [selectedTiming, setSelectedTiming] = useState([]);
+    const [doneLoading, setDoneLoading] = useState(false);
+
     const fetchBookingTimings = async (date) => {
         const startTime = date.getTime();
         const endTime = startTime + 86400000;
         var myHeaders = new Headers();
-        myHeaders.append(
-            "Authorization",
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU1MDQ2NjEzLCJqdGkiOiIzZWI4YzA5Y2IyZGQ0OGQ3OGIxNGI4ODg2ZGYzMDJkZCIsInVzZXJfaWQiOjE3Mn0.lxNCZv49eokzQ6BXly2TQbP7S5deCwGLi7UmsQOagYE"
-        );
+        myHeaders.append("Authorization", "Bearer " + accessToken);
 
         var requestOptions = {
             method: "GET",
@@ -334,53 +338,61 @@ export default SelectTimeScreen = (props) => {
                 return response.json();
             })
             .then((result) => {
-                if (result != []) {
+                console.log(result);
+                if (result.length !== 0) {
                     result.forEach((booking) => {
                         const title = booking.title;
                         const bookingStartTimeEpoch = booking.startDateTime;
                         const bookingEndTimeEpoch = booking.endDateTime;
                         const bookerName = booking.booker.name;
-                        const bookerEmail = booking.booker.email;
+
                         var bookingStartTime = new Date(0);
                         bookingStartTime.setUTCMilliseconds(
                             bookingStartTimeEpoch
                         );
-                        console.log(bookingStartTime.getHours());
-                        console.log(bookingStartTime.getMinutes());
-                        const bookingTimeLocal =
+                        var bookingEndTime = new Date(0);
+                        bookingEndTime.setUTCMilliseconds(bookingEndTimeEpoch);
+                        const bookingTimeLocalStart =
                             String(bookingStartTime.getHours()) +
                             String(bookingStartTime.getMinutes()).padStart(
                                 2,
                                 "0"
                             );
-                        console.log(bookingTimeLocal);
-                        bookingData.forEach((item) => {
-                            if (item.time == bookingTimeLocal) {
-                                console.log("timing matched");
-                                item.title = title;
+                        const bookingTimeLocalEnd =
+                            String(bookingEndTime.getHours()) +
+                            String(bookingEndTime.getMinutes()).padStart(
+                                2,
+                                "0"
+                            );
+                        console.log(bookingTimeLocalStart);
+                        bookingTemplate.forEach((item, index) => {
+                            const testArray = [...bookingTemplate];
+                            // if (item.time == bookingTimeLocalStart) {
+                            //     console.log("timing matched");
+                            //     console.log(title);
+                            //     testArray[index].title = title;
+                            // }
+                            if (
+                                item.time >= parseInt(bookingTimeLocalStart) &&
+                                item.time <= parseInt(bookingTimeLocalEnd)
+                            ) {
+                                testArray[index].title = title;
                             }
+                            setBookingData(testArray);
                         });
-                        console.log(bookingData);
-                        setBookingData(bookingData);
-
-                        // bookingData.forEach((item) => {
-                        //     if (item.time == bookingTimeLocal) {
-                        //         console.log("timing matched");
-                        //         item.title = title;
-                        //     }
-                        // });
+                        setDoneLoading(true);
                     });
+                } else {
+                    setBookingData(bookingTemplate);
+                    setDoneLoading(true);
                 }
             })
             .catch((error) => console.log("error", error));
     };
 
-    // useEffect(() => {
-    //     console.log("Activated")
-    // }, [bookingData]);
-
     useEffect(() => {
-        setBookingData(bookingTemplate);
+        setDoneLoading(false);
+        console.log(doneLoading);
         setSelectedTiming([]);
         date.setHours(0, 0, 0, 0);
         console.log("Getting data from Treeckle for " + date);
@@ -433,10 +445,10 @@ export default SelectTimeScreen = (props) => {
     const renderBooking = ({ item }) => {
         return (
             <BookingTiming
+                disabled={item.title != "" ? true : false}
                 onPress={() => {
                     // var userSelectedTimings = ["0700", "0730"];
                     if (selectedTiming.includes(item.time)) {
-                        console.log("already exists");
                         setSelectedTiming(
                             selectedTiming.filter(
                                 (object) => object !== item.time
@@ -504,6 +516,7 @@ export default SelectTimeScreen = (props) => {
             <View>
                 {show && (
                     <DateTimePicker
+                        minimumDate={new Date()}
                         value={date}
                         mode={mode}
                         is24Hour={true}
@@ -512,13 +525,17 @@ export default SelectTimeScreen = (props) => {
                 )}
             </View>
             <View style={styles.bookingTimingContainer}>
-                <FlatList
-                    extraData={bookingData}
-                    ItemSeparatorComponent={bookingDivider}
-                    data={bookingData}
-                    renderItem={renderBooking}
-                    showsVerticalScrollIndicator={false}
-                />
+                {doneLoading ? (
+                    <FlatList
+                        extraData={bookingTemplate}
+                        ItemSeparatorComponent={bookingDivider}
+                        data={bookingData}
+                        renderItem={renderBooking}
+                        showsVerticalScrollIndicator={false}
+                    />
+                ) : (
+                    <Text style={styles.loadingText}>Getting data...</Text>
+                )}
             </View>
         </View>
     );
@@ -565,5 +582,11 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderRadius: 5,
         height: 0.45 * height,
+    },
+    loadingText: {
+        fontFamily: "Montserrat-Bold",
+        fontSize: 15,
+        alignSelf: "center",
+        marginTop: 0.2 * height,
     },
 });
