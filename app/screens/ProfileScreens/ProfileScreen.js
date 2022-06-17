@@ -1,16 +1,61 @@
-import { View, Text, Image, StyleSheet, Button } from "react-native";
+import { View, Text, Image, StyleSheet, Button, } from "react-native";
 import { TouchableOpacity } from "react-native";
-import userProfile from "../../assets/userProfile.png";
-import { supabase } from "../../supabase";
-export default ProfileScreen = () => {
+import { supabase } from "../../../supabase";
+import { useState, useEffect, } from "react";
+import { useNavigation } from "@react-navigation/native";
+import 'react-native-url-polyfill/auto';
+import PasswordResetScreen from "./PasswordResetScreen";
+
+
+export default ProfileScreen = ({ session }) => {
+    const navigation = useNavigation()
+    const [loading, setLoading] = useState(false)
+    const [username, setUsername] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [nusid, setNusid] = useState(null)
+    const [bio, setBio] = useState(null)
+
+    const user = supabase.auth.user()
+
+
+    useEffect(() => {
+        if (supabase.auth.session()) getProfile();
+    }, [session]);
+
+    async function getProfile() {
+        try {
+            setLoading(true);
+            const user = supabase.auth.user();
+
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select(`username,email,nusid,bio`)
+                .eq('id', user.id)
+                .single()
+
+            if (data) {
+                setUsername(data.username);
+                setEmail(data.email);
+                setNusid(data.nusid);
+                setBio(data.bio);
+            }
+            if (error && status !== 406) {
+                throw error;
+            }
+
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     async function signOut() {
         const { error } = await supabase.auth.signOut();
     }
     return (
         <View style={styles.container}>
             <Image
-                style={styles.userDisplayPicture}
-                source={userProfile}
             ></Image>
             <TouchableOpacity>
                 <Text style={styles.userDisplayPictureText}>
@@ -18,20 +63,23 @@ export default ProfileScreen = () => {
                 </Text>
             </TouchableOpacity>
             <View style={styles.userDetailsContainer}>
-                <Text style={styles.userDetailsText}>Name: John AppleSeed</Text>
-                <Text style={styles.userDetailsText}>NUS ID: E0123456</Text>
+                <Text style={styles.userDetailsText}>Name: {username}</Text>
+                <Text style={styles.userDetailsText}>NUSID: {nusid}</Text>
                 <Text style={styles.userDetailsText}>
-                    Email: E0123456@u.nus.edu
+                    Email: {email}
                 </Text>
-                <Text style={styles.userDetailsText}>Bio: I like Sports</Text>
+                <Text style={styles.userDetailsText}>Bio: {bio}</Text>
             </View>
-            <TouchableOpacity>
-                <Text style={styles.userDisplayPictureText}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("EditProfileScreen")}
+            >
+                <Text style={styles.userDetailsText}>
                     Edit profile details
                 </Text>
             </TouchableOpacity>
             <View style={styles.bottomNavigationContainer}>
                 <TouchableOpacity
+                    onPress={() => navigation.navigate("PasswordResetScreen")}
                     style={[styles.button, { backgroundColor: "#0C3370" }]}
                 >
                     <Text style={[styles.buttonText, { color: "white" }]}>
