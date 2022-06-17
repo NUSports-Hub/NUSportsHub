@@ -1,20 +1,83 @@
 import React from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, TouchableOpacity } from "react-native";
+import {
+    Image,
+    TouchableOpacity,
+    Text,
+    KeyboardAvoidingView,
+    StyleSheet,
+    TextInput,
+    View,
+    Alert,
+} from "react-native";
 import { useState } from "react";
+import logo from "../../assets/Logo.png";
+import { useNavigation } from "@react-navigation/native";
+import { supabase } from "../../supabase";
+import * as Animatable from "react-native-animatable";
+import 'react-native-url-polyfill';
 
-const LoginScreen = () => {
-    const [NUSid, setNUSid] = useState("");
+export default LoginScreen = () => {
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    async function signInWithEmail() {
+        // setLoading(true);
+        const { user, error } = await supabase.auth.signIn({
+            email: email,
+            password: password,
+        });
+        if (error) {
+            console.log(error.message);
+            setErrorMessage("");
+            setErrorMessage("Invalid Login Credentials");
+        }
+        // setLoading(false);
+    }
 
+    async function signUpWithEmail() {
+        // setLoading(true);
+        const { user, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            console.log(error.message);
+            if (error.message.includes("registered")) {
+                setErrorMessage("");
+                setErrorMessage("Email is already registered");
+            } else if (error.message.includes("requires a valid password")) {
+                setErrorMessage("");
+                setErrorMessage("Please enter a valid password");
+            } else if (error.message.includes("8 characters")) {
+                setErrorMessage("");
+                setErrorMessage("Password should be at least 8 characters");
+            }
+        } else {
+            setErrorMessage("");
+            setSuccessMessage(
+                "Your registration is complete. \nAn email containing activation instructions has been sent to " +
+                email
+            );
+        }
+
+        // setLoading(false);
+    }
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <View style={styles.image}>
+                <Image
+                    style={{ resizeMode: "contain", height: 200, width: 300 }}
+                    source={logo}
+                />
+            </View>
             <View style={styles.inputContainer}>
                 <TextInput
-                    placeholder="NUS ID"
-                    value={NUSid}
-                    onChangeText={(text) => setNUSid(text)}
+                    placeholder="exxxxxxxx@u.nus.edu"
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
                     style={styles.input}
                 />
 
@@ -26,29 +89,60 @@ const LoginScreen = () => {
                     secureTextEntry
                 />
             </View>
+            <View style={styles.forgotpwContainer}>
+                <TouchableOpacity onPress={() => { }} style={styles.password}>
+                    <Text style={styles.forgotpwText}>Forgot Password?</Text>
+                </TouchableOpacity>
+            </View>
+            <View>
+                {errorMessage ? (
+                    <Animatable.Text animation="shake" style={styles.errorText}>
+                        {errorMessage}
+                    </Animatable.Text>
+                ) : null}
+                {successMessage ? (
+                    <Animatable.Text
+                        animation="fadeIn"
+                        style={[styles.errorText, { color: "green" }]}
+                    >
+                        {successMessage}
+                    </Animatable.Text>
+                ) : null}
+            </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => {}} style={styles.button}>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (email.includes("gmail")) {
+                            signInWithEmail();
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Please input a valid NUS email");
+                        }
+                    }}
+                    style={styles.button}
+                >
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => {}}
+                    onPress={signUpWithEmail}
                     style={[styles.button, styles.buttonOutline]}
                 >
-                    <Text style={styles.buttonOutlineText}>Register</Text>
+                    <Text style={styles.buttonOutlineTextunderline}>
+                        Register
+                    </Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#0C3370",
     },
     inputContainer: {
         width: "80%",
@@ -57,7 +151,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         paddingHorizontal: 15,
         paddingVertical: 10,
-        borderRadius: 10,
+        borderRadius: 30,
         marginTop: 5,
     },
     button: {
@@ -69,7 +163,7 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
-        width: "60%",
+        width: "80%",
         justifyContent: "center",
         alignItems: "center",
         marginTop: 40,
@@ -90,5 +184,20 @@ const styles = StyleSheet.create({
         color: "black",
         fontWeight: "700",
         fontSize: 16,
+    },
+
+    forgotpwContainer: {
+        color: "00FFFFFF",
+    },
+
+    forgotpwText: {
+        color: "white",
+        textDecorationLine: "underline",
+    },
+    errorText: {
+        fontFamily: "Montserrat-SemiBold",
+        color: "red",
+        marginTop: 10,
+        paddingHorizontal: 40,
     },
 });

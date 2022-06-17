@@ -2,28 +2,9 @@ import * as cheerio from "cheerio";
 import { Text, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native";
 
-// export default FetchCapacity = () => {
-//     var gymCapacityList = [];
-//     const renderItem = ({ item }) => (
-//         <View>
-//             <Text>{item.capacity}</Text>
-//         </View>
-//     );
-
-//     return (
-//         console.log(gymCapacityList),
-//         (
-//             <FlatList
-//                 horizontal={true}
-//                 data={gymCapacityList}
-//                 renderItem={renderItem}
-//                 showsHorizontalScrollIndicator={false}
-//             />
-//         )
-//     );
-// };
-var gymCapacityList = [];
+var capacityList = [];
 const FetchCapacityCall = async () => {
+    capacityList = [];
     await fetch(
         "https://reboks.nus.edu.sg/nus_public_web/public/index.php/facilities/capacity",
         {
@@ -59,11 +40,19 @@ const FetchCapacityCall = async () => {
                     name: facilityName,
                     capacity: facilityCapacity,
                 };
-                gymCapacityList.push(gymCapacity);
+                capacityList.push(gymCapacity);
             });
-            console.log(gymCapacityList);
+            poolData.each(function (index, element) {
+                const facilityName = $(element).children("span").text();
+                const facilityCapacity = $(element).children("b").text();
+                const poolCapacity = {
+                    name: facilityName,
+                    capacity: facilityCapacity,
+                };
+                capacityList.push(poolCapacity);
+            });
+            // console.log(gymCapacityList);
         });
 };
 
-// FetchCapacityCall();
-export { FetchCapacityCall, gymCapacityList };
+export { FetchCapacityCall, capacityList };
