@@ -14,6 +14,8 @@ import logo from "../../assets/Logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../../supabase";
 import * as Animatable from "react-native-animatable";
+import 'react-native-url-polyfill';
+
 export default LoginScreen = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -57,7 +59,7 @@ export default LoginScreen = () => {
             setErrorMessage("");
             setSuccessMessage(
                 "Your registration is complete. \nAn email containing activation instructions has been sent to " +
-                    email
+                email
             );
         }
 
@@ -88,7 +90,7 @@ export default LoginScreen = () => {
                 />
             </View>
             <View style={styles.forgotpwContainer}>
-                <TouchableOpacity onPress={() => {}} style={styles.password}>
+                <TouchableOpacity onPress={() => { }} style={styles.password}>
                     <Text style={styles.forgotpwText}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>
@@ -110,13 +112,12 @@ export default LoginScreen = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
-                        // if (email.includes("u.nus.edu")) {
-                        //     signInWithEmail();
-                        // } else {
-                        //     setErrorMessage("");
-                        //     setErrorMessage("Please input a valid NUS email");
-                        // }
-                        signInWithEmail();
+                        if (email.includes("gmail")) {
+                            signInWithEmail();
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Please input a valid NUS email");
+                        }
                     }}
                     style={styles.button}
                 >

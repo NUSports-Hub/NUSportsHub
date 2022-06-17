@@ -9,11 +9,13 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
-import ProfileScreen from "./app/screens/ProfileScreen.js";
+//import ProfileScreen from "./app/screens/ProfileScreens/ProfileScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
+import ProfileNavigator from "./app/screens/ProfileScreens/ProfileNavigator.js";
 import { supabase } from "./supabase.js";
+import "react-native-url-polyfill/auto";
 
 function ExploreScreen() {
     return (
@@ -26,7 +28,6 @@ function ExploreScreen() {
 }
 
 function Home({ session }) {
-    // console.log(session);
     return (
         <Tab.Navigator
             initialRouteName="Home"
@@ -85,7 +86,7 @@ function Home({ session }) {
             <Tab.Screen
                 name="Profile"
                 options={{
-                    headerShown: true,
+                    headerShown: false,
                     headerLeft: null,
                     headerStyle: {
                         backgroundColor: "#0C3370",
@@ -105,7 +106,7 @@ function Home({ session }) {
                     ),
                 }}
             >
-                {(props) => <ProfileScreen {...props} session={session} />}
+                {(props) => <ProfileNavigator {...props} session={session} />}
             </Tab.Screen>
         </Tab.Navigator>
     );
