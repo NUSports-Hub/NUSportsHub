@@ -5,7 +5,7 @@ const FetchLoginTreeckle = () => {
     var raw = JSON.stringify({
         email: "e0726600@u.nus.edu",
         name: "adenteo",
-        password: "Iltptt2021a!",
+        password: "",
     });
 
     var requestOptions = {
