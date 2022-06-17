@@ -25,7 +25,8 @@ function ExploreScreen() {
     );
 }
 
-function Home() {
+function Home({ session }) {
+    // console.log(session);
     return (
         <Tab.Navigator
             initialRouteName="Home"
@@ -83,7 +84,6 @@ function Home() {
             />
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
                 options={{
                     headerShown: true,
                     headerLeft: null,
@@ -104,7 +104,9 @@ function Home() {
                         />
                     ),
                 }}
-            />
+            >
+                {(props) => <ProfileScreen {...props} session={session} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 }
@@ -119,7 +121,6 @@ function App() {
         setSession(supabase.auth.session());
 
         supabase.auth.onAuthStateChange((_event, session) => {
-            console.log(session);
             setSession(session);
         });
         async function prepare() {
@@ -149,25 +150,9 @@ function App() {
     if (!appIsReady) {
         return null;
     }
-    // return (
-    //     <NavigationContainer>
-    //         <Stack.Navigator>
-    //             <Stack.Screen
-    //                 options={{ headerShown: false }}
-    //                 name="Login"
-    //                 component={LoginScreen}
-    //             />
-    //             <Stack.Screen
-    //                 options={{ headerShown: false }}
-    //                 name="HomeScreen"
-    //                 component={Home}
-    //             />
-    //         </Stack.Navigator>
-    //     </NavigationContainer>
-    // );
     return (
         <NavigationContainer>
-            {session ? <Home /> : <LoginScreen />}
+            {session ? <Home session={session} /> : <LoginScreen />}
         </NavigationContainer>
     );
 }

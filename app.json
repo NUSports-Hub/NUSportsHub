@@ -1,5 +1,6 @@
 {
     "expo": {
+        "owner": "nusportshub",
         "name": "orbitalProject",
         "slug": "orbitalProject",
         "version": "1.0.0",
