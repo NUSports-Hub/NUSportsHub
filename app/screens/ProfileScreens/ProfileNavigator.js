@@ -3,10 +3,10 @@ import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import PasswordResetScreen from "./PasswordResetScreen";
 import { supabase } from "../../../supabase";
-import 'react-native-url-polyfill/auto';
+import "react-native-url-polyfill/auto";
 const Stack = createStackNavigator();
 
-export default ProfileNavigator = ({ session }) => {
+export default ProfileNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen

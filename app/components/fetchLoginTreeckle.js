@@ -1,11 +1,12 @@
 var accessToken = null;
 const FetchLoginTreeckle = () => {
+    console.log("Logging in to Treeckle...");
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
         email: "e0726600@u.nus.edu",
         name: "adenteo",
-        password: "",
+        password: "Iltptt2021a!",
     });
 
     var requestOptions = {

@@ -14,7 +14,7 @@ import logo from "../../assets/Logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../../supabase";
 import * as Animatable from "react-native-animatable";
-import 'react-native-url-polyfill';
+import "react-native-url-polyfill";
 
 export default LoginScreen = () => {
     const [errorMessage, setErrorMessage] = useState("");
@@ -23,17 +23,16 @@ export default LoginScreen = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     async function signInWithEmail() {
-        // setLoading(true);
         const { user, error } = await supabase.auth.signIn({
             email: email,
             password: password,
         });
         if (error) {
+            console.log(error);
             console.log(error.message);
             setErrorMessage("");
             setErrorMessage("Invalid Login Credentials");
         }
-        // setLoading(false);
     }
 
     async function signUpWithEmail() {
@@ -59,7 +58,7 @@ export default LoginScreen = () => {
             setErrorMessage("");
             setSuccessMessage(
                 "Your registration is complete. \nAn email containing activation instructions has been sent to " +
-                email
+                    email
             );
         }
 
@@ -90,7 +89,7 @@ export default LoginScreen = () => {
                 />
             </View>
             <View style={styles.forgotpwContainer}>
-                <TouchableOpacity onPress={() => { }} style={styles.password}>
+                <TouchableOpacity onPress={() => {}} style={styles.password}>
                     <Text style={styles.forgotpwText}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>

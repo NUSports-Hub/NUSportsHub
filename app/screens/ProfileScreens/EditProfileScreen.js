@@ -1,25 +1,25 @@
 import { TextInput } from "react-native-gesture-handler";
-import { View, Text, Image, StyleSheet, Button, } from "react-native";
+import { View, Text, Image, StyleSheet, Button } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { supabase } from "../../../supabase";
-import { useState, useEffect, } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import 'react-native-url-polyfill/auto';
+import "react-native-url-polyfill/auto";
 import ProfileScreen from "./ProfileScreen";
 
-
 export default EditProfileScreen = () => {
-    const navigation = useNavigation()
-    const [loading, setLoading] = useState(true)
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [nusid, setNusid] = useState("")
-    const [bio, setBio] = useState("")
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [nusid, setNusid] = useState("");
+    const [bio, setBio] = useState("");
+    const [updated, setUpdated] = useState("");
 
     const updateProfile = async () => {
         try {
-            setLoading(true)
-            const user = supabase.auth.user()
+            setLoading(true);
+            const user = supabase.auth.user();
             if (!user) throw new Error("No user on the session!");
 
             const updates = {
@@ -29,21 +29,24 @@ export default EditProfileScreen = () => {
                 nusid,
                 bio,
                 //updated_at: new Date(),
-            }
+            };
 
-            let { error } = await supabase.from('profiles').update(updates, {
-                returning: 'minimal', // Don't return the value after inserting
-            }).eq("id", user.id)
+            let { error } = await supabase
+                .from("profiles")
+                .update(updates, {
+                    returning: "representation",
+                })
+                .eq("id", user.id);
 
             if (error) {
-                throw error
+                throw error;
             }
         } catch (error) {
-            alert(error.message)
+            alert(error.message);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
     return (
         <View style={styles.container}>
             <View style={styles.userDetailsContainer}>
@@ -78,13 +81,12 @@ export default EditProfileScreen = () => {
                 onPress={() => {
                     updateProfile({ username, nusid, email, bio });
                     // how to make the update refelcted in profile screen in real time
-                    navigation.navigate("ProfileScreen");
-
+                    navigation.navigate("ProfileScreen", {
+                        profileUpdated: true,
+                    });
                 }}
-            >
-            </Button>
-            <View style={styles.bottomNavigationContainer}>
-            </View>
+            ></Button>
+            <View style={styles.bottomNavigationContainer}></View>
         </View>
     );
 };
