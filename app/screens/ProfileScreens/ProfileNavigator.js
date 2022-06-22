@@ -3,7 +3,7 @@ import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import PasswordResetScreen from "./PasswordResetScreen";
 import { supabase } from "../../../supabase";
-import 'react-native-url-polyfill/auto';
+import "react-native-url-polyfill/auto";
 const Stack = createStackNavigator();
 
 export default ProfileNavigator = ({ session }) => {
@@ -32,7 +32,7 @@ export default ProfileNavigator = ({ session }) => {
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },
-                    headerTitle: "Profile",
+                    headerTitle: "Edit Profile",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },
