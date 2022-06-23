@@ -32,6 +32,7 @@ function Home({ session }) {
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
+                tabBarHideOnKeyboard: true,
                 headerShown: false,
                 tabBarStyle: { backgroundColor: "#0C3370" },
                 tabBarActiveTintColor: "black",
