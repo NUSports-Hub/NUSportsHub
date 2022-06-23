@@ -22,6 +22,21 @@ export default LoginScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+
+    async function forgetPassword() {
+        const { data, error } = await supabase.auth.api
+            .resetPasswordForEmail(email, {
+                redirectTo: "http://localhost:3000/password-reset",
+            })
+        if (error) {
+            console.log(error.message);
+            setErrorMessage("")
+            setErrorMessage("Please input a valid email")
+        }
+        else {
+            Alert.alert("Please check you email account to reset password")
+        }
+    }
     async function signInWithEmail() {
         // setLoading(true);
         const { user, error } = await supabase.auth.signIn({
@@ -90,7 +105,7 @@ export default LoginScreen = () => {
                 />
             </View>
             <View style={styles.forgotpwContainer}>
-                <TouchableOpacity onPress={() => { }} style={styles.password}>
+                <TouchableOpacity onPress={() => forgetPassword()} style={styles.password}>
                     <Text style={styles.forgotpwText}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>
