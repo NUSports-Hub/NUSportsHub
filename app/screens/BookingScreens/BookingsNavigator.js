@@ -3,6 +3,7 @@ import BookingsMainScreen from "./BookingsMainScreen";
 import SelectActivityScreen from "./SelectActivityScreen";
 import SelectTimeScreen from "./SelectTimeScreen";
 import CurrentBookingsScreen from "./CurrentBookingsScreen";
+import BookingsPlatformScreen from "./BookingsPlatformScreen";
 import { TouchableOpacity, Button } from "react-native";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
@@ -27,6 +28,23 @@ export default BookingsNavigator = () => {
                 }}
                 name="BookingsMainScreen"
                 component={BookingsMainScreen}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+
+                    headerTitle: "New Booking",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                }}
+                name="BookingsPlatformScreen"
+                component={BookingsPlatformScreen}
             />
             <Stack.Screen
                 options={{
@@ -61,6 +79,7 @@ export default BookingsNavigator = () => {
                 name="SelectTimeScreen"
                 component={SelectTimeScreen}
             />
+
             <Stack.Screen
                 options={{
                     headerShown: true,

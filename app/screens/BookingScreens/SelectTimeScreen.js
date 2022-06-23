@@ -479,7 +479,7 @@ export default SelectTimeScreen = (props) => {
             <View>
                 <TouchableOpacity
                     onPress={() => {
-                        console.log(bookingData);
+                        console.log(selectedTiming);
                     }}
                 >
                     <Text style={styles.headerText}>Activity Selected:</Text>
@@ -535,6 +535,9 @@ export default SelectTimeScreen = (props) => {
                     <Text style={styles.loadingText}>Getting data...</Text>
                 )}
             </View>
+            <TouchableOpacity style={styles.continueButton}>
+                <Text style={styles.continueButtonText}>Continue</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -586,5 +589,18 @@ const styles = StyleSheet.create({
         fontSize: 15,
         alignSelf: "center",
         marginTop: 0.2 * height,
+    },
+    continueButton: {
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: 10,
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: "#0C3370",
+        width: 0.9 * width,
+    },
+    continueButtonText: {
+        fontFamily: "Montserrat-Bold",
+        color: "white",
     },
 });

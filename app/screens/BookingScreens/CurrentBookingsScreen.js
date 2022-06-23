@@ -116,7 +116,6 @@ export default CurrentBookingsScreen = () => {
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={emptyComponent}
                     ItemSeparatorComponent={bookingDivider}
-                    ListFooterComponent={bookingDivider}
                 />
             </View>
         </View>
