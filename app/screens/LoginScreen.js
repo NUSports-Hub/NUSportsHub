@@ -9,14 +9,16 @@ import {
     View,
     Alert,
 } from "react-native";
+
 import { useState } from "react";
 import logo from "../../assets/Logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../../supabase";
 import * as Animatable from "react-native-animatable";
-import 'react-native-url-polyfill';
+import "react-native-url-polyfill";
 
 export default LoginScreen = () => {
+    const navigation = useNavigation();
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [email, setEmail] = useState("");
@@ -59,7 +61,7 @@ export default LoginScreen = () => {
             setErrorMessage("");
             setSuccessMessage(
                 "Your registration is complete. \nAn email containing activation instructions has been sent to " +
-                email
+                    email
             );
         }
 
@@ -90,7 +92,12 @@ export default LoginScreen = () => {
                 />
             </View>
             <View style={styles.forgotpwContainer}>
-                <TouchableOpacity onPress={() => { }} style={styles.password}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate("ForgotPasswordScreen");
+                    }}
+                    style={styles.password}
+                >
                     <Text style={styles.forgotpwText}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>
