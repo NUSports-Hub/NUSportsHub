@@ -15,16 +15,17 @@ export default PasswordResetScreen = () => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
 
-    const user = supabase.auth.user();
+    // const user = supabase.auth.user()
 
-    async function ChangePassword() {
-        const { user, error } = await supabase.auth.update({
-            password: password,
-        });
-    }
+    // async function ChangePassword() {
+    //     const { user, error } = await supabase.auth.update({ password: password })
+    // };
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Enter New Password"
@@ -62,28 +63,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "white",
+        backgroundColor: "#0C3370",
     },
     inputContainer: {
         width: "80%",
     },
     input: {
+        fontFamily: "Montserrat-Bold",
         backgroundColor: "white",
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 30,
         marginTop: 5,
     },
-    button: {
-        backgroundColor: "#EEEEEE",
-        width: "100%",
-        padding: 15,
-        borderRadius: 10,
-        alignItems: "center",
-    },
-
     buttonContainer: {
+        backgroundColor: "white",
         width: "80%",
+        padding: 10,
+        borderRadius: 15,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 40,
@@ -96,13 +93,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     buttonText: {
+        fontFamily: "Montserrat-Bold",
         color: "black",
-        fontWeight: "700",
-        fontSize: 16,
-    },
-    buttonOutlineText: {
-        color: "black",
-        fontWeight: "700",
+
         fontSize: 16,
     },
 

@@ -167,7 +167,7 @@ function App() {
     }
     return (
         <NavigationContainer linking={linking}>
-            {<LoginNavigator />}
+            {session ? <Home session={session} /> : <LoginNavigator />}
         </NavigationContainer>
     );
 }
