@@ -365,8 +365,8 @@ export default SelectTimeScreen = (props) => {
                                 "0"
                             );
                         console.log(bookingTimeLocalStart);
+                        const testArray = [...bookingTemplate];
                         bookingTemplate.forEach((item, index) => {
-                            const testArray = [...bookingTemplate];
                             // if (item.time == bookingTimeLocalStart) {
                             //     console.log("timing matched");
                             //     console.log(title);
@@ -392,7 +392,6 @@ export default SelectTimeScreen = (props) => {
 
     useEffect(() => {
         setDoneLoading(false);
-        console.log(doneLoading);
         setSelectedTiming([]);
         date.setHours(0, 0, 0, 0);
         console.log("Getting data from Treeckle for " + date);
@@ -527,7 +526,6 @@ export default SelectTimeScreen = (props) => {
             <View style={styles.bookingTimingContainer}>
                 {doneLoading ? (
                     <FlatList
-                        extraData={bookingTemplate}
                         ItemSeparatorComponent={bookingDivider}
                         data={bookingData}
                         renderItem={renderBooking}

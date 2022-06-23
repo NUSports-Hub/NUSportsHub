@@ -30,7 +30,7 @@ export default EditProfileScreen = () => {
             let { data, error, status } = await supabase
                 .from("profiles")
                 .select(`username,email,nusid,bio`)
-                .eq("id", user.id)
+                .eq("user_id", user.id)
                 .single();
 
             if (data) {
@@ -58,7 +58,7 @@ export default EditProfileScreen = () => {
             if (!user) throw new Error("No user on the session!");
 
             const updates = {
-                id: user.id,
+                user_id: user.id,
                 username,
                 email,
                 nusid,
@@ -71,7 +71,7 @@ export default EditProfileScreen = () => {
                 .update(updates, {
                     returning: "minimal", // Don't return the value after inserting
                 })
-                .eq("id", user.id);
+                .eq("user_id", user.id);
 
             if (error) {
                 throw error;

@@ -48,7 +48,7 @@ export default ProfileScreen = () => {
             const { data, error } = await supabase
                 .from("profiles")
                 .update({ avatar_url: word })
-                .eq("id", user.id);
+                .eq("user_id", user.id);
             console.log("done");
         }
     };
@@ -68,7 +68,7 @@ export default ProfileScreen = () => {
             let { data, error, status } = await supabase
                 .from("profiles")
                 .select(`username,email,nusid,bio,avatar_url`)
-                .eq("id", user.id)
+                .eq("user_id", user.id)
                 .single();
 
             if (data) {
@@ -81,7 +81,7 @@ export default ProfileScreen = () => {
                 console.log("hello");
                 await supabase.from("profiles").insert([
                     {
-                        id: user.id,
+                        user_id: user.id,
                     },
                 ]);
             }
