@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import HomeScreen from "./app/screens/HomeScreen.js";
 import LoginScreen from "./app/screens/LoginScreen.js";
+//import ProfileScreen from "./app/screens/ProfileScreens/ProfileScreen.js";
 import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";

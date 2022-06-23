@@ -6,7 +6,7 @@ import { supabase } from "../../../supabase";
 import "react-native-url-polyfill/auto";
 const Stack = createStackNavigator();
 
-export default ProfileNavigator = () => {
+export default ProfileNavigator = ({ session }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
