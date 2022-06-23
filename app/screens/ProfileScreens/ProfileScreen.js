@@ -1,34 +1,73 @@
-import { View, Text, Image, StyleSheet, Button } from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    Button,
+    Dimensions,
+} from "react-native";
 import { TouchableOpacity } from "react-native";
 import { supabase } from "../../../supabase";
 import { useState, useEffect } from "react";
+import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import "react-native-url-polyfill/auto";
 import PasswordResetScreen from "./PasswordResetScreen";
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+const { width, height } = Dimensions.get("window");
 export default ProfileScreen = () => {
+    useFocusEffect(
+        React.useCallback(() => {
+            getProfile();
+            console.log("Getting profile...");
+        }, [])
+    );
+
     const navigation = useNavigation();
+
     const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState(null);
     const [email, setEmail] = useState(null);
     const [nusid, setNusid] = useState(null);
     const [bio, setBio] = useState(null);
-    const user = supabase.auth.user();
-    const session = supabase.auth.session();
-    useEffect(() => {
-        if (session) {
-            getProfile();
-            console.log("loading sess");
+    const [avatar, setAvatar] = useState(null);
+    var word = "";
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            console.log("returned image uri" + result.uri);
+            setAvatar(result.uri);
+            word = result.uri;
+            const { data, error } = await supabase
+                .from("profiles")
+                .update({ avatar_url: word })
+                .eq("id", user.id);
+            console.log("done");
         }
-    }, [session]);
+    };
+    // useEffect(() => {
+    //     console.log("hello");
+    // }, [avatar]);
+    // useEffect(() => {
+    //     getProfile();
+    // }, []);
+    const user = supabase.auth.user();
 
     async function getProfile() {
         try {
+            setLoading(true);
             const user = supabase.auth.user();
 
             let { data, error, status } = await supabase
                 .from("profiles")
-                .select(`username,email,nusid,bio`)
+                .select(`username,email,nusid,bio,avatar_url`)
                 .eq("id", user.id)
                 .single();
 
@@ -52,42 +91,30 @@ export default ProfileScreen = () => {
         } catch (error) {
             alert(error.message);
         } finally {
+            setLoading(false);
         }
     }
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
     }
-    return (
-        <View style={styles.container}>
-            <Image></Image>
-            <TouchableOpacity onPress={() => {}}>
-                <Text style={styles.userDisplayPictureText}>
-                    Edit Profile Picture
-                </Text>
-            </TouchableOpacity>
-            <View style={styles.userDetailsContainer}>
-                <Text style={styles.userDetailsText}>Name: {username}</Text>
-                <Text style={styles.userDetailsText}>NUSID: {nusid}</Text>
-                <Text style={styles.userDetailsText}>Email: {email}</Text>
-                <Text style={styles.userDetailsText}>Bio: {bio}</Text>
-            </View>
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate("EditProfileScreen");
-                }}
-            >
-                <Text style={styles.userDetailsText}>Edit profile details</Text>
-            </TouchableOpacity>
-            <View style={styles.bottomNavigationContainer}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate("PasswordResetScreen");
-                    }}
-                    style={[styles.button, { backgroundColor: "#0C3370" }]}
-                >
-                    <Text style={[styles.buttonText, { color: "white" }]}>
-                        Change Password
+
+    if (!loading) {
+        return (
+            <View style={styles.container}>
+                <View>
+                    {avatar ? (
+                        <Image source={{ uri: avatar }} style={styles.avatar} />
+                    ) : (
+                        <Image
+                            source={require("../../../assets/userProfile.png")}
+                            style={styles.avatar}
+                        />
+                    )}
+                </View>
+                <TouchableOpacity onPress={pickImage}>
+                    <Text style={styles.userDisplayPictureText}>
+                        Edit Profile Picture
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.userDetailsContainer}>

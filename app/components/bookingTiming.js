@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         fontFamily: "Montserrat-Bold",
         fontSize: 15,
         color: "black",
-        paddingLeft: 5,
+        paddingLeft: 15,
         width: 0.15 * width,
     },
     bookingTitle: {
