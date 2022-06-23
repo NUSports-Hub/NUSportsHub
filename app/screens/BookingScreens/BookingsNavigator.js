@@ -14,7 +14,18 @@ export default BookingsNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+                    headerTitle: "Bookings",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                }}
                 name="BookingsMainScreen"
                 component={BookingsMainScreen}
             />

@@ -133,7 +133,7 @@ export default ProfileScreen = () => {
                 <View style={styles.bottomNavigationContainer}>
                     <TouchableOpacity
                         onPress={() =>
-                            navigation.navigate("PasswordResetScreen")
+                            navigation.navigate("VerificationScreen")
                         }
                         style={[styles.button, { backgroundColor: "#0C3370" }]}
                     >
@@ -161,6 +161,8 @@ const styles = StyleSheet.create({
         width: 150,
         marginVertical: 25,
         borderRadius: 100,
+        borderWidth: 2,
+        borderColor: "black",
     },
     container: {
         alignItems: "center",
