@@ -5,6 +5,7 @@ import { useState, useEffect, } from "react";
 import { useNavigation } from "@react-navigation/native";
 import 'react-native-url-polyfill/auto';
 import PasswordResetScreen from "./PasswordResetScreen";
+import userProfile from "../../../assets/userProfile.png"
 
 
 export default ProfileScreen = ({ session }) => {
@@ -14,9 +15,7 @@ export default ProfileScreen = ({ session }) => {
     const [email, setEmail] = useState(null)
     const [nusid, setNusid] = useState(null)
     const [bio, setBio] = useState(null)
-
     const user = supabase.auth.user()
-
 
     useEffect(() => {
         if (supabase.auth.session()) getProfile();
@@ -56,8 +55,12 @@ export default ProfileScreen = ({ session }) => {
     return (
         <View style={styles.container}>
             <Image
-            ></Image>
-            <TouchableOpacity>
+                style={styles.userDisplayPicture}
+                source={userProfile}
+            />
+            <TouchableOpacity
+                onPress={() => { }}
+            >
                 <Text style={styles.userDisplayPictureText}>
                     Edit Profile Picture
                 </Text>
@@ -79,7 +82,7 @@ export default ProfileScreen = ({ session }) => {
             </TouchableOpacity>
             <View style={styles.bottomNavigationContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("PasswordResetScreen")}
+                    onPress={() => navigation.navigate("VScreen")}
                     style={[styles.button, { backgroundColor: "#0C3370" }]}
                 >
                     <Text style={[styles.buttonText, { color: "white" }]}>

@@ -6,7 +6,11 @@ import {
     TouchableOpacity,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
+import BookingsNavigator from "../screens/BookingScreens/BookingsNavigator";
+
 export default UserFavourites = (props) => {
+    const navigation = useNavigation()
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons

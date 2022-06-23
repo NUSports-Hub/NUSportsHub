@@ -1,14 +1,15 @@
 import { TextInput } from "react-native-gesture-handler";
 import { View, Text, Image, StyleSheet, Button, } from "react-native";
 import { TouchableOpacity } from "react-native";
+import React from "react";
 import { supabase } from "../../../supabase";
 import { useState, useEffect, } from "react";
 import { useNavigation } from "@react-navigation/native";
 import 'react-native-url-polyfill/auto';
-import ProfileScreen from "./ProfileScreen";
 
 
-export default EditProfileScreen = () => {
+
+export default EditProfileScreen = ({ session }) => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState("")
@@ -16,6 +17,37 @@ export default EditProfileScreen = () => {
     const [nusid, setNusid] = useState("")
     const [bio, setBio] = useState("")
 
+    useEffect(() => {
+        if (supabase.auth.session()) getProfile();
+    }, [session]);
+
+    async function getProfile() {
+        try {
+            setLoading(true);
+            const user = supabase.auth.user();
+
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select(`username,email,nusid,bio`)
+                .eq('id', user.id)
+                .single()
+
+            if (data) {
+                setUsername(data.username);
+                setEmail(data.email);
+                setNusid(data.nusid);
+                setBio(data.bio);
+            }
+            if (error && status !== 406) {
+                throw error;
+            }
+
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
     const updateProfile = async () => {
         try {
             setLoading(true)
@@ -49,7 +81,7 @@ export default EditProfileScreen = () => {
             <View style={styles.userDetailsContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Name"
+                    placeholder="Username"
                     value={username}
                     onChangeText={(text) => setUsername(text)}
                 />
@@ -79,7 +111,6 @@ export default EditProfileScreen = () => {
                     updateProfile({ username, nusid, email, bio });
                     // how to make the update refelcted in profile screen in real time
                     navigation.navigate("ProfileScreen");
-
                 }}
             >
             </Button>

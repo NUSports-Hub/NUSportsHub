@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import PasswordResetScreen from "./PasswordResetScreen";
+import VScreen from "./VScreen";
 import { supabase } from "../../../supabase";
 import 'react-native-url-polyfill/auto';
 const Stack = createStackNavigator();
@@ -32,7 +33,7 @@ export default ProfileNavigator = ({ session }) => {
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },
-                    headerTitle: "Profile",
+                    headerTitle: "Edit Profile",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },
@@ -45,6 +46,24 @@ export default ProfileNavigator = ({ session }) => {
             <Stack.Screen
                 options={{
                     headerShown: true,
+                    headerLeft: null,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+                    headerTitle: "Verification",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                }}
+                name="VScreen"
+                component={VScreen}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerLeft: null,
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },

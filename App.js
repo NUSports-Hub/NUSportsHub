@@ -32,7 +32,16 @@ function Home({ session }) {
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
-                headerShown: false,
+                headerShown: true,
+                headerStyle: {
+                    backgroundColor: "#0C3370",
+                },
+                headerTitle: "Home",
+                headerTitleStyle: {
+                    fontFamily: "Montserrat-Bold",
+                },
+                headerTintColor: "white",
+                headerTitleAlign: "center",
                 tabBarStyle: { backgroundColor: "#0C3370" },
                 tabBarActiveTintColor: "black",
                 tabBarInactiveTintColor: "white",
