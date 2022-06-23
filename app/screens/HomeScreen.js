@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../../supabase";
 import {
     StyleSheet,
     Text,
@@ -6,6 +7,7 @@ import {
     SafeAreaView,
     ScrollView,
     StatusBar,
+    Dimensions,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native";
@@ -16,6 +18,8 @@ import { capacityList } from "../components/fetchCapacity";
 import FacilityCapacity from "../components/capacity";
 import { FetchCapacityCall } from "../components/fetchCapacity.js";
 import UserFavourites from "../components/favourites";
+import { useNavigation } from "@react-navigation/native";
+const { width, height } = Dimensions.get("window");
 const userFavouritesData = [
     {
         iconName: "table-tennis",
@@ -30,55 +34,64 @@ const userFavouritesData = [
         favouriteName: "Volleyball",
     },
 ];
-const upcomingBookingData = [
-    {
-        dateDay: "15",
-        dateMonth: "May",
-        title: "Table Tennis",
-        descriptionTime: "0900 - 1100",
-        descriptionLocation: "Kent Ridge MPSH",
-    },
-    {
-        dateDay: "22",
-        dateMonth: "May",
-        title: "Badminton",
-        descriptionTime: "0700 - 0900",
-        descriptionLocation: "University Town Gym",
-    },
-    {
-        dateDay: "28",
-        dateMonth: "May",
-        title: "Table Tennis",
-        descriptionTime: "0900 - 1100",
-        descriptionLocation: "Kent Ridge MPSH",
-    },
-    {
-        dateDay: "28",
-        dateMonth: "May",
-        title: "Table Tennis",
-        descriptionTime: "0900 - 1100",
-        descriptionLocation: "Kent Ridge MPSH",
-    },
-    {
-        dateDay: "28",
-        dateMonth: "May",
-        title: "Table Tennis",
-        descriptionTime: "0900 - 1100",
-        descriptionLocation: "Kent Ridge MPSH",
-    },
+const monthConverter = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
 ];
-
 export default HomeScreen = () => {
-    const test = () => {
-        alert("hello");
-    };
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
+    const [userBookings, setUserBookings] = useState([]);
+    async function getBookings() {
+        try {
+            setLoading(true);
+            const user = supabase.auth.user();
+            console.log(user.id);
+            let { data, error, status } = await supabase
+                .from("bookings")
+                .select(`title,start_time,end_time,date,location`)
+                .eq("user_id", user.id);
+
+            if (data) {
+                console.log(data);
+                console.log("Getting Data");
+                setUserBookings(data);
+            } else {
+                console.log("hello");
+            }
+            if (error && status !== 406) {
+                throw error;
+            }
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        getBookings();
+    }, []);
     const renderBooking = ({ item }) => (
         <UserBooking
-            dateDay={item.dateDay}
-            dateMonth={item.dateMonth}
+            dateDay={item.date.substr(8, 2)}
+            dateMonth={monthConverter[parseInt(item.date.substr(5, 2)) - 1]}
             title={item.title}
-            descriptionTime={item.descriptionTime}
-            descriptionLocation={item.descriptionLocation}
+            descriptionTime={
+                item.start_time.substr(0, 8) +
+                " - " +
+                item.end_time.substr(0, 8)
+            }
+            descriptionLocation={item.location}
         />
     );
 
@@ -150,14 +163,20 @@ export default HomeScreen = () => {
                         size={20}
                     />
                 </View>
-                <TouchableOpacity onPress={test}>
+                <TouchableOpacity
+                    onPress={() =>
+                        navigation.navigate("Bookings", {
+                            screen: "CurrentBookingsScreen",
+                        })
+                    }
+                >
                     <AddItem />
                 </TouchableOpacity>
             </View>
             <SafeAreaView style={styles.wrapper}>
                 <FlatList
                     ItemSeparatorComponent={bookingDivider}
-                    data={upcomingBookingData}
+                    data={userBookings}
                     renderItem={renderBooking}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={emptyComponent}
@@ -252,8 +271,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     emptyComponent: {
-        borderWidth: 3,
-        borderColor: "red",
+        paddingTop: 0.1 * height,
+        alignItems: "center",
+        justifyContent: "center",
     },
     emptyComponentText: {
         fontFamily: "Montserrat-Medium",

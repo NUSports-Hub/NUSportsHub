@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     bookingDetailsWrapper: {
         margin: 5,
+        justifyContent: "center",
     },
     bookingDateDay: {
         fontFamily: "Montserrat-Bold",
