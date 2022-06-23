@@ -1,20 +1,12 @@
 import { TextInput } from "react-native-gesture-handler";
-import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-    Button,
-    Dimensions,
-} from "react-native";
-import { TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import { View, Text, Image, StyleSheet, Button } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { supabase } from "../../../supabase";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import "react-native-url-polyfill/auto";
 import ProfileScreen from "./ProfileScreen";
 
-const { width, height } = Dimensions.get("window");
 export default EditProfileScreen = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
@@ -22,38 +14,11 @@ export default EditProfileScreen = () => {
     const [email, setEmail] = useState("");
     const [nusid, setNusid] = useState("");
     const [bio, setBio] = useState("");
-    async function getProfile() {
-        try {
-            setLoading(true);
-            const user = supabase.auth.user();
-
-            let { data, error, status } = await supabase
-                .from("profiles")
-                .select(`username,email,nusid,bio`)
-                .eq("id", user.id)
-                .single();
-
-            if (data) {
-                setUsername(data.username);
-                setEmail(data.email);
-                setNusid(data.nusid);
-                setBio(data.bio);
-            }
-            if (error && status !== 406) {
-                throw error;
-            }
-        } catch (error) {
-            alert(error.message);
-        } finally {
-            setLoading(false);
-        }
-    }
-    useEffect(() => {
-        getProfile();
-    }, []);
+    const [updated, setUpdated] = useState("");
 
     const updateProfile = async () => {
         try {
+            setLoading(true);
             const user = supabase.auth.user();
             if (!user) throw new Error("No user on the session!");
 
@@ -69,7 +34,7 @@ export default EditProfileScreen = () => {
             let { error } = await supabase
                 .from("profiles")
                 .update(updates, {
-                    returning: "minimal", // Don't return the value after inserting
+                    returning: "representation",
                 })
                 .eq("id", user.id);
 
@@ -79,6 +44,7 @@ export default EditProfileScreen = () => {
         } catch (error) {
             alert(error.message);
         } finally {
+            setLoading(false);
         }
     };
     return (
@@ -129,7 +95,19 @@ export default EditProfileScreen = () => {
                     <Text style={styles.buttonText}>Save Changes</Text>
                 </TouchableOpacity>
             </View>
-        </KeyboardAvoidingView>
+            <Button
+                title={"Save Changes"}
+                color="#f194ff"
+                onPress={() => {
+                    updateProfile({ username, nusid, email, bio });
+                    // how to make the update refelcted in profile screen in real time
+                    navigation.navigate("ProfileScreen", {
+                        profileUpdated: true,
+                    });
+                }}
+            ></Button>
+            <View style={styles.bottomNavigationContainer}></View>
+        </View>
     );
 };
 
