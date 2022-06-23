@@ -11,26 +11,27 @@ import {
     View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
+import 'react-native-url-polyfill/auto';
+import * as Animatable from "react-native-animatable";
 
-export default PasswordResetScreen = () => {
+export default VerificationScreen = () => {
     const [errorMessage, setErrorMessage] = useState("")
-    const [newPassword, setNewPassword] = useState(null)
-    const [confirmPassword, setConfirmPassword] = useState(null)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const navigation = useNavigation()
 
-    const user = supabase.auth.user()
-
-    async function ChangePassword() {
-        const { user, error } = await supabase.auth.update({ password: newPassword })
+    async function CheckPassword() {
+        const { user, error } = await supabase.auth.signIn({
+            email: email,
+            password: password
+        })
         if (error) {
             console.log(error.message);
             setErrorMessage("");
-            setErrorMessage("New password is not identical")
+            setErrorMessage("Please enter the correct email/ password");
         }
         else {
-            navigation.navigate("ProfileScreen")
-            Alert.alert("Password successfully changed")
+            navigation.navigate("PasswordResetScreen")
         }
     };
 
@@ -38,16 +39,15 @@ export default PasswordResetScreen = () => {
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.inputContainer}>
                 <TextInput
-                    placeholder="Enter New Password"
-                    value={newPassword}
-                    onChangeText={(text) => setNewPassword(text)}
+                    placeholder="Enter Email"
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
                     style={styles.input}
-                    secureTextEntry
                 />
                 <TextInput
-                    placeholder="Confirm New Password"
-                    value={confirmPassword}
-                    onChangeText={(text) => setConfirmPassword(text)}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
                     style={styles.input}
                     secureTextEntry
                 />
@@ -55,14 +55,24 @@ export default PasswordResetScreen = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
-                        if (newPassword === confirmPassword) {
-                            ChangePassword()
+                        if (email.includes("gmail")) {
+                            CheckPassword();
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Please input a valid NUS email");
                         }
                     }}
                     style={[styles.button]}
                 >
                     <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
+            </View>
+            <View>
+                {errorMessage ? (
+                    <Animatable.Text animation="shake" style={styles.errorText}>
+                        {errorMessage}
+                    </Animatable.Text>
+                ) : null}
             </View>
         </KeyboardAvoidingView>
     );
@@ -87,17 +97,17 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "#0C3370",
-        width: "80%",
+        width: "100%",
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
     },
 
     buttonContainer: {
-        width: "80%",
+        width: "70%",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 40,
+        marginTop: 30,
     },
 
     buttonOutline: {
@@ -123,3 +133,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
     },
 });
+

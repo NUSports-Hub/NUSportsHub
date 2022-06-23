@@ -132,9 +132,7 @@ export default ProfileScreen = () => {
                 </TouchableOpacity>
                 <View style={styles.bottomNavigationContainer}>
                     <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate("PasswordResetScreen")
-                        }
+                        onPress={() => navigation.navigate("VerificationScreen")}
                         style={[styles.button, { backgroundColor: "#0C3370" }]}
                     >
                         <Text style={[styles.buttonText, { color: "white" }]}>
