@@ -243,7 +243,6 @@ export default HomeScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: StatusBar.currentHeight,
         flex: 1,
     },
     componentHeader: {
