@@ -32,7 +32,7 @@ export default ProfileNavigator = () => {
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },
-                    headerTitle: "Profile",
+                    headerTitle: "Edit Profile",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },

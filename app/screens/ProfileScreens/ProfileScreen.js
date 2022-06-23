@@ -37,6 +37,14 @@ export default ProfileScreen = () => {
                 setEmail(data.email);
                 setNusid(data.nusid);
                 setBio(data.bio);
+                setAvatar(data.avatar_url);
+            } else {
+                console.log("hello");
+                await supabase.from("profiles").insert([
+                    {
+                        id: user.id,
+                    },
+                ]);
             }
             if (error && status !== 406) {
                 throw error;
@@ -82,19 +90,55 @@ export default ProfileScreen = () => {
                         Change Password
                     </Text>
                 </TouchableOpacity>
+                <View style={styles.userDetailsContainer}>
+                    <Text style={styles.userDetailsText}>Name: {username}</Text>
+                    <Text style={styles.userDetailsText}>NUS ID: {nusid}</Text>
+                    <Text style={styles.userDetailsText}>Email: {email}</Text>
+                    <Text style={styles.userDetailsText}>Bio: {bio}</Text>
+                </View>
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: "#FF6D03" }]}
-                    onPress={signOut}
+                    onPress={() => navigation.navigate("EditProfileScreen")}
                 >
-                    <Text style={styles.buttonText}>Sign Out</Text>
+                    <Text style={styles.userDisplayPictureText}>
+                        Edit profile details
+                    </Text>
                 </TouchableOpacity>
+                <View style={styles.bottomNavigationContainer}>
+                    <TouchableOpacity
+                        onPress={() =>
+                            navigation.navigate("PasswordResetScreen")
+                        }
+                        style={[styles.button, { backgroundColor: "#0C3370" }]}
+                    >
+                        <Text style={[styles.buttonText, { color: "white" }]}>
+                            Change Password
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#FF6D03" }]}
+                        onPress={signOut}
+                    >
+                        <Text style={styles.buttonText}>Sign Out</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-    );
+        );
+    } else {
+        return null;
+    }
 };
 
 const styles = StyleSheet.create({
-    container: { alignItems: "center" },
+    avatar: {
+        height: 150,
+        width: 150,
+        marginVertical: 25,
+        borderRadius: 100,
+    },
+    container: {
+        alignItems: "center",
+        flex: 1,
+    },
     userDisplayPicture: {
         margin: 20,
         width: 124,
@@ -110,15 +154,17 @@ const styles = StyleSheet.create({
     userDetailsContainer: {
         backgroundColor: "#E2DFDF",
         borderRadius: 15,
-        marginVertical: 10,
+        marginVertical: 25,
         padding: 15,
+        width: 0.8 * width,
     },
     userDetailsText: {
         fontFamily: "Montserrat-SemiBold",
         padding: 5,
     },
     bottomNavigationContainer: {
-        marginTop: "40%",
+        position: "absolute",
+        bottom: 10,
         width: "60%",
     },
     button: {

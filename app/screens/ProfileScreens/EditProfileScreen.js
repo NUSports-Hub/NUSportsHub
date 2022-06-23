@@ -48,32 +48,52 @@ export default EditProfileScreen = () => {
         }
     };
     return (
-        <View style={styles.container}>
-            <View style={styles.userDetailsContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Name"
-                    value={username}
-                    onChangeText={(text) => setUsername(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="NUSID"
-                    value={nusid}
-                    onChangeText={(text) => setNusid(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Bio"
-                    value={bio}
-                    onChangeText={(text) => setBio(text)}
-                />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+            keyboardVerticalOffset={100}
+        >
+            <View style={styles.inner}>
+                <View style={styles.userDetailsContainer}>
+                    <Text>Username:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Name"
+                        value={username}
+                        onChangeText={(text) => setUsername(text)}
+                    />
+                    <Text>NUS ID:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="NUS ID"
+                        value={nusid}
+                        onChangeText={(text) => setNusid(text)}
+                    />
+                    <Text>Email:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                    />
+                    <Text>Biography:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Bio"
+                        value={bio}
+                        onChangeText={(text) => setBio(text)}
+                    />
+                </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        updateProfile({ username, nusid, email, bio });
+                        // how to make the update refelcted in profile screen in real time
+                        navigation.navigate("ProfileScreen");
+                    }}
+                >
+                    <Text style={styles.buttonText}>Save Changes</Text>
+                </TouchableOpacity>
             </View>
             <Button
                 title={"Save Changes"}
@@ -92,40 +112,37 @@ export default EditProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { alignItems: "center" },
-    userDisplayPicture: {
-        margin: 20,
-        width: 124,
-        height: 119,
-        borderRadius: 100,
-        borderWidth: 1,
-        borderColor: "black",
-    },
-    userDisplayPictureText: {
-        fontFamily: "Montserrat-ExtraBold",
-        fontSize: 10,
+    container: {
+        alignItems: "center",
+        flex: 1,
     },
     userDetailsContainer: {
         backgroundColor: "#E2DFDF",
         borderRadius: 15,
-        marginVertical: 30,
         padding: 30,
+        width: 0.8 * width,
     },
     userDetailsText: {
         fontFamily: "Montserrat-SemiBold",
         padding: 5,
     },
-    bottomNavigationContainer: {
-        marginTop: "40%",
-        width: "60%",
-    },
     button: {
         padding: 10,
-        marginVertical: 5,
         borderRadius: 5,
+        backgroundColor: "#0C3370",
+        width: "60%",
     },
     buttonText: {
         fontFamily: "Montserrat-Bold",
         textAlign: "center",
+        color: "white",
+    },
+    input: {
+        fontFamily: "Montserrat-Bold",
+    },
+    inner: {
+        flex: 1,
+        justifyContent: "space-around",
+        alignItems: "center",
     },
 });
