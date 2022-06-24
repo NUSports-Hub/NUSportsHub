@@ -15,17 +15,9 @@ import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
 import ProfileNavigator from "./app/screens/ProfileScreens/ProfileNavigator.js";
 import { supabase } from "./supabase.js";
-import "react-native-url-polyfill/auto";
-
-function ExploreScreen() {
-    return (
-        <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-            <Text>Explore!</Text>
-        </View>
-    );
-}
+import LoginNavigator from "./app/screens/LoginNavigator.js";
+// import "react-native-url-polyfill/auto";
+import * as Linking from "expo-linking";
 
 function Home({ session }) {
     return (
@@ -123,9 +115,30 @@ function Home({ session }) {
 }
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 
+const prefix = Linking.createURL("/");
 function App() {
+    const linking = {
+        prefixes: [prefix],
+        config: {
+            screens: {
+                // Home: "Home",
+                // Profile: "Profile",
+                // Bookings: {
+                //     screens: {
+                //         Bookings: "Bookings",
+                //         BookingsPlatformScreen: "BookingsPlatformScreen",
+                //     },
+                // },
+                ForgotPasswordScreen: {
+                    screens: {
+                        LoginScreen: "LoginScreen",
+                        ForgotPasswordScreen: "ForgotPasswordScreen",
+                    },
+                },
+            },
+        },
+    };
     const [appIsReady, setAppIsReady] = useState(false);
     const [session, setSession] = useState(null);
     useEffect(() => {
@@ -162,8 +175,8 @@ function App() {
         return null;
     }
     return (
-        <NavigationContainer>
-            {session ? <Home session={session} /> : <LoginScreen />}
+        <NavigationContainer linking={linking}>
+            {session ? <Home session={session} /> : <LoginNavigator />}
         </NavigationContainer>
     );
 }

@@ -1,5 +1,6 @@
 {
     "expo": {
+        "scheme": "myapp",
         "owner": "nusportshub",
         "name": "orbitalProject",
         "slug": "orbitalProject",
