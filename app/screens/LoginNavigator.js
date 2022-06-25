@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity, Button, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import LoginScreen from "./LoginScreen";
-import ForgotPasswordScreen from "./ProfileScreens/ForgotPasswordScreen";
+import ForgotPasswordScreen from "./ForgotPasswordScreen";
 const Stack = createStackNavigator();
 
 export default LoginNavigator = (data) => {

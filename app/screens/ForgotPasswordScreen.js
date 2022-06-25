@@ -1,5 +1,5 @@
 import React from "react";
-import { supabase } from "../../../supabase";
+import { supabase } from "../../supabase";
 import { useState, useEffect } from "react";
 import "react-native-url-polyfill/auto";
 import {
@@ -9,13 +9,53 @@ import {
     StyleSheet,
     TextInput,
     View,
+    Alert,
 } from "react-native";
+//import { useNavigation } from "@react-navigation/native";
+import * as RootNavigation from "/Users/admin/Desktop/Orbital Dev4/NUSportsHub/app/screens/RootNavigation.js";
 
-export default PasswordResetScreen = () => {
+export default ForgotPasswordScreen = ({ hash }) => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
+    //const navigation = useNavigation();
+    const [errorMessage, setErrorMessage] = useState("");
+    //const [type, setType] = useState(null)
 
-    // const user = supabase.auth.user()
+    //const [url, setUrl] = useState(null)
+    //const [hash, setHash] = useState(null)
+
+    //useEffect(() => {
+    //setUrl(Linking.addEventListener('url'))
+    //setHash(url.substring(url.indexOf('#')))
+    //}, [])
+
+    async function ChangePassword() {
+        try {
+            if (!hash) {
+                RootNavigation.navigate("Home")
+                Alert.alert("Please generate another reset email")
+            }
+            else if (hash) {
+                const accessToken = hash.split("=")[1].split("&")[0]
+
+                const { error } = await supabase.auth.api.updateUser(accessToken, {
+                    password: password,
+                });
+                if (error) {
+                    console.log(error);
+                    setErrorMessage("");
+                    setErrorMessage("New password is not identical")
+                }
+                else if (!error) {
+                    RootNavigation.navigate("Home")
+                    Alert.alert("Password Updated")
+                }
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     // async function ChangePassword() {
     //     const { user, error } = await supabase.auth.update({ password: password })
@@ -46,10 +86,9 @@ export default PasswordResetScreen = () => {
                 <TouchableOpacity
                     onPress={() => {
                         if (password === confirmPassword) {
-                            ChangePassword();
+                            ChangePassword()
                         }
                     }}
-                    // can add
                 >
                     <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>

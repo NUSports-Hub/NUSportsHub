@@ -14,10 +14,12 @@ import { FetchCapacityCall } from "./app/components/fetchCapacity.js";
 import BookingsNavigator from "./app/screens/BookingScreens/BookingsNavigator.js";
 import ExploreNavigator from "./app/screens/ExploreScreens/ExploreNavigator.js";
 import ProfileNavigator from "./app/screens/ProfileScreens/ProfileNavigator.js";
-import { supabase } from "./supabase.js";
 import LoginNavigator from "./app/screens/LoginNavigator.js";
-// import "react-native-url-polyfill/auto";
+import { supabase } from "./supabase.js";
+import "react-native-url-polyfill/auto";
 import * as Linking from "expo-linking";
+import ForgotPasswordScreen from "./app/screens/ForgotPasswordScreen.js";
+//import { navigationRef } from "./app/screens/RootNavigation.js";
 
 function Home({ session }) {
     return (
@@ -117,18 +119,27 @@ function Home({ session }) {
 const Tab = createBottomTabNavigator();
 
 const prefix = Linking.createURL("/");
+
 function App() {
     const [data, setData] = useState(null);
+    const [url, setUrl] = useState("");
+    const [hash, setHash] = useState(null);
 
     function handleDeepLink(event) {
+        let data = Linking.parse(event.url);
+        setUrl(event.url);
+        setHash(event.url.split("#")[1]);
         setData(event);
     }
     useEffect(() => {
-        // const testEvent = Linking.getInitialURL().then((result) => {
-        //     console.log("url:" + result);
-        //     setData(result);
-        // });
+        async function getInitialUrl() {
+            const initialUrl = await Linking.getInitialURL();
+            if (initialUrl) setData(Linking.parse(initialUrl));
+        }
         const event = Linking.addEventListener("url", handleDeepLink);
+        if (!data) {
+            getInitialUrl();
+        }
         return () => {
             event.remove();
         };
@@ -138,7 +149,7 @@ function App() {
         prefixes: [prefix],
         config: {
             screens: {
-                // Home: "Home",
+                Home: "Home",
                 // Profile: "Profile",
                 // Bookings: {
                 //     screens: {
@@ -155,8 +166,10 @@ function App() {
             },
         },
     };
+
     const [appIsReady, setAppIsReady] = useState(false);
     const [session, setSession] = useState(null);
+
     useEffect(() => {
         setSession(supabase.auth.session());
 
@@ -195,13 +208,12 @@ function App() {
     }
     return (
         <NavigationContainer linking={linking}>
-            {session ? (
+            {hash ? (
+                <ForgotPasswordScreen hash={hash} />
+            ) : session ? (
                 <Home session={session} />
             ) : (
-                <LoginNavigator data={data} />
-                // <View style={{ marginTop: 50, alignItems: "center" }}>
-                //     <Text>{JSON.stringify(data)}</Text>
-                // </View>
+                <LoginNavigator />
             )}
         </NavigationContainer>
     );
