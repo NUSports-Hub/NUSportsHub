@@ -26,17 +26,19 @@ export default LoginScreen = () => {
     const [loading, setLoading] = useState(false);
 
     async function forgetPassword() {
-        const { data, error } = await supabase.auth.api
-            .resetPasswordForEmail(email, {
-                redirectTo: "http://localhost:3000/password-reset",
-            })
+        const { data, error } = await supabase.auth.api.resetPasswordForEmail(
+            email,
+            {
+                redirectTo:
+                    "exp://exp.host/@nusportshub/orbitalProject/--/ForgotPasswordScreen",
+            }
+        );
         if (error) {
             console.log(error.message);
-            setErrorMessage("")
-            setErrorMessage("Please input a valid email")
-        }
-        else {
-            Alert.alert("Please check you email account to reset password")
+            setErrorMessage("");
+            setErrorMessage("Please input a valid email");
+        } else {
+            Alert.alert("An email has been sent to your registered email.");
         }
     }
     async function signInWithEmail() {
@@ -107,9 +109,10 @@ export default LoginScreen = () => {
                 />
             </View>
             <View style={styles.forgotpwContainer}>
-
-                <TouchableOpacity onPress={() => forgetPassword()} style={styles.password}>
-
+                <TouchableOpacity
+                    onPress={() => forgetPassword()}
+                    style={styles.password}
+                >
                     <Text style={styles.forgotpwText}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>

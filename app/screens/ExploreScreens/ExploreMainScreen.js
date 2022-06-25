@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, StatusBar, TextInput } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    StatusBar,
+    TextInput,
+    Dimensions,
+} from "react-native";
+import { useState, useEffect } from "react";
 import {
     getFocusedRouteNameFromRoute,
     useNavigation,
@@ -6,7 +14,10 @@ import {
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import UserEvent from "../../components/event";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+    FetchNusyncEvent,
+    eventList,
+} from "../../components/fetchNusyncEvents";
 
 const eventsData = [
     {
@@ -43,11 +54,44 @@ const eventsData = [
     },
 ];
 
-const renderEvent = ({ item }) => (
-    <UserEvent name={item.name} date={item.date} />
-);
+// const renderEvent = ({ item }) => (
+//     <UserEvent name={item.name} date={item.date} />
+// );
 
+const renderEvent = ({ item }) => {
+    const formatStartDate = new Date(Date.parse(item.startsOn));
+    const formatEndDate = new Date(Date.parse(item.endsOn));
+    var imagePath = item.imagePath;
+    if (imagePath == null) {
+        imagePath = item.organizationProfilePicture;
+    }
+    return (
+        <UserEvent
+            name={item.name}
+            startsOnNotFormatted={String(formatStartDate)}
+            endsOnNotFormatted={String(formatEndDate)}
+            startsOn={formatStartDate.toUTCString()}
+            endsOn={formatEndDate.toUTCString()}
+            imageUrl={imagePath}
+            location={item.location}
+            description={item.description}
+            organizationName={item.organizationName}
+        />
+    );
+};
+const { width, height } = Dimensions.get("window");
 export default ExploreMainScreen = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        const loadEvents = async () => {
+            await FetchNusyncEvent();
+            setData(eventList);
+        };
+        loadEvents();
+        console.log(data);
+        setLoading(true);
+    }, []);
     return (
         <View>
             <View style={styles.searchContainer}>
@@ -56,7 +100,11 @@ export default ExploreMainScreen = () => {
                     placeholder="Search Events"
                     placeholderTextColor={"black"}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        setData(eventList.slice(1, 3));
+                    }}
+                >
                     <MaterialCommunityIcons
                         name="magnify"
                         color={"#FF6D03"}
@@ -74,12 +122,21 @@ export default ExploreMainScreen = () => {
 
             <Text style={styles.upcomingEventsHeaderText}>Upcoming Events</Text>
             <View style={styles.eventsContainer}>
-                <FlatList
-                    data={eventsData}
-                    renderItem={renderEvent}
-                    numColumns={2}
-                    showsVerticalScrollIndicator={false}
-                />
+                {loading ? (
+                    <FlatList
+                        extraData={data}
+                        data={data}
+                        renderItem={renderEvent}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                    />
+                ) : (
+                    <View style={styles.loading}>
+                        <Text style={styles.loadingText}>
+                            Loading events...
+                        </Text>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -106,5 +163,14 @@ const styles = StyleSheet.create({
     eventsContainer: {
         justifyContent: "center",
         alignItems: "center",
+        height: 0.75 * height,
+    },
+    loading: {
+        paddingTop: 0.3 * height,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    loadingText: {
+        fontFamily: "Montserrat-ExtraBold",
     },
 });

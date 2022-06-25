@@ -24,11 +24,9 @@ const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
-        paddingTop: StatusBar.currentHeight,
     },
     bookingWrapper: {
-        height: 0.38 * height,
+        height: 0.35 * height,
         borderRadius: 20,
         justifyContent: "center",
         marginHorizontal: 30,

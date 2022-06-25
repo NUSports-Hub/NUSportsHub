@@ -1,6 +1,4 @@
 import * as cheerio from "cheerio";
-import { Text, StyleSheet, View } from "react-native";
-import { FlatList } from "react-native";
 
 var capacityList = [];
 const FetchCapacityCall = async () => {

@@ -23,6 +23,22 @@ export default ExploreNavigator = () => {
                 name="ExploreMainScreen"
                 component={ExploreMainScreen}
             />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: "#0C3370",
+                    },
+                    headerTitle: "Explore",
+                    headerTitleStyle: {
+                        fontFamily: "Montserrat-Bold",
+                    },
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                }}
+                name="EventDetailScreen"
+                component={EventDetailScreen}
+            />
         </Stack.Navigator>
     );
 };

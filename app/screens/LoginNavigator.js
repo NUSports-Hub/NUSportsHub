@@ -5,8 +5,9 @@ import LoginScreen from "./LoginScreen";
 import ForgotPasswordScreen from "./ProfileScreens/ForgotPasswordScreen";
 const Stack = createStackNavigator();
 
-export default LoginNavigator = () => {
+export default LoginNavigator = (data) => {
     const navigation = useNavigation();
+    console.log(data);
     return (
         <Stack.Navigator>
             <Stack.Screen

@@ -21,21 +21,24 @@ export default UserBooking = (props) => {
     );
 };
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
     bookingContainer: {
+        flex: 1,
         flexDirection: "row",
         padding: 5,
         alignItems: "center",
-        height: 0.11 * height,
+        height: 0.15 * height,
     },
     bookingDateWrapper: {
+        flex: 0.15,
         justifyContent: "center",
         alignItems: "center",
         margin: 10,
     },
     bookingDetailsWrapper: {
+        flex: 0.85,
         margin: 5,
         justifyContent: "center",
     },
