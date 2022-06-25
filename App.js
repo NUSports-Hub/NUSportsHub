@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { Link, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SplashScreen from "expo-splash-screen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -20,7 +20,6 @@ import "react-native-url-polyfill/auto";
 import * as Linking from "expo-linking";
 import ForgotPasswordScreen from "./app/screens/ForgotPasswordScreen.js";
 //import { navigationRef } from "./app/screens/RootNavigation.js";
-
 
 function Home({ session }) {
     return (
@@ -117,30 +116,25 @@ function Home({ session }) {
     );
 }
 
-
-
 const Tab = createBottomTabNavigator();
 
 const prefix = Linking.createURL("/");
 
 function App() {
-
     const [data, setData] = useState(null);
-    const [url, setUrl] = useState("")
-    const [hash, setHash] = useState(null)
-
+    const [url, setUrl] = useState("");
+    const [hash, setHash] = useState(null);
 
     function handleDeepLink(event) {
         let data = Linking.parse(event.url);
         setUrl(event.url);
-        setHash(event.url.split('#')[1]);
+        setHash(event.url.split("#")[1]);
         setData(event);
     }
     useEffect(() => {
         async function getInitialUrl() {
             const initialUrl = await Linking.getInitialURL();
-            if (initialUrl)
-                setData(Linking.parse(initialUrl));
+            if (initialUrl) setData(Linking.parse(initialUrl));
         }
         const event = Linking.addEventListener("url", handleDeepLink);
         if (!data) {
@@ -149,9 +143,7 @@ function App() {
         return () => {
             event.remove();
         };
-    }, [])
-
-
+    }, []);
 
     const linking = {
         prefixes: [prefix],
@@ -179,13 +171,14 @@ function App() {
     const [session, setSession] = useState(null);
 
     useEffect(() => {
-
-
         setSession(supabase.auth.session());
 
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
+        supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setSession(session);
+            },
+            [session]
+        );
         async function prepare() {
             try {
                 // Keep the splash screen visible while we fetch resources
@@ -209,15 +202,19 @@ function App() {
             }
         }
         prepare();
-
-
     }, []);
     if (!appIsReady) {
         return null;
     }
     return (
         <NavigationContainer linking={linking}>
-            {hash ? <ForgotPasswordScreen hash={hash} /> : session ? <Home session={session} /> : <LoginNavigator />}
+            {hash ? (
+                <ForgotPasswordScreen hash={hash} />
+            ) : session ? (
+                <Home session={session} />
+            ) : (
+                <LoginNavigator />
+            )}
         </NavigationContainer>
     );
 }

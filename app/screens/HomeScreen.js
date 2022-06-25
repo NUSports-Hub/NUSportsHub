@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import * as React from "react";
 import { supabase } from "../../supabase";
 import {
     StyleSheet,
@@ -18,7 +19,7 @@ import { capacityList } from "../components/fetchCapacity";
 import FacilityCapacity from "../components/capacity";
 import { FetchCapacityCall } from "../components/fetchCapacity.js";
 import UserFavourites from "../components/favourites";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 const { width, height } = Dimensions.get("window");
 const userFavouritesData = [
     {
@@ -52,6 +53,12 @@ export default HomeScreen = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [userBookings, setUserBookings] = useState([]);
+    useFocusEffect(
+        React.useCallback(() => {
+            getBookings();
+            console.log("Getting bookings...");
+        }, [])
+    );
     async function getBookings() {
         try {
             setLoading(true);
@@ -67,7 +74,7 @@ export default HomeScreen = () => {
                 console.log("Getting Data");
                 setUserBookings(data);
             } else {
-                console.log("hello");
+                console.log("No data found");
             }
             if (error && status !== 406) {
                 throw error;
@@ -81,19 +88,23 @@ export default HomeScreen = () => {
     useEffect(() => {
         getBookings();
     }, []);
-    const renderBooking = ({ item }) => (
-        <UserBooking
-            dateDay={item.date.substr(8, 2)}
-            dateMonth={monthConverter[parseInt(item.date.substr(5, 2)) - 1]}
-            title={item.title}
-            descriptionTime={
-                item.start_time.substr(0, 8) +
-                " - " +
-                item.end_time.substr(0, 8)
-            }
-            descriptionLocation={item.location}
-        />
-    );
+    const renderBooking = ({ item }) => {
+        const eventStart = new Date(item.start_time);
+        const eventEnd = new Date(item.end_time);
+        return (
+            <UserBooking
+                dateDay={eventStart.getDate()}
+                dateMonth={monthConverter[eventStart.getMonth()]}
+                title={item.title}
+                descriptionTime={
+                    eventStart.toLocaleTimeString() +
+                    " - " +
+                    eventEnd.toLocaleTimeString()
+                }
+                descriptionLocation={item.location}
+            />
+        );
+    };
 
     const renderCapacity = ({ item }) => (
         <FacilityCapacity name={item.name} capacity={item.capacity} />
@@ -192,17 +203,14 @@ export default HomeScreen = () => {
                         color={"black"}
                         size={20}
                     />
-                    <TouchableOpacity onPress={onRefresh}>
-                        <MaterialCommunityIcons
-                            style={{ paddingLeft: 10 }}
-                            name="refresh"
-                            color={"black"}
-                            size={20}
-                        />
-                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
-                    <AddItem />
+                <TouchableOpacity onPress={onRefresh}>
+                    <MaterialCommunityIcons
+                        style={{ paddingLeft: 10 }}
+                        name="refresh"
+                        color={"black"}
+                        size={20}
+                    />
                 </TouchableOpacity>
             </View>
             <SafeAreaView style={styles.wrapper}>

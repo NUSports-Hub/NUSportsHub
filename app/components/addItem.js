@@ -5,5 +5,11 @@ import { Text, StyleSheet, View } from "react-native";
 export default AddItem = () => {
     // const [item, setItem] = useState();
     // const handleAddItem = () =>
-    return <MaterialCommunityIcons name="pencil" color={"black"} size={20} />;
+    return (
+        <MaterialCommunityIcons
+            name="dots-vertical"
+            color={"black"}
+            size={20}
+        />
+    );
 };
