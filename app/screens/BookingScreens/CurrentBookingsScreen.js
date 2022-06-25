@@ -38,15 +38,17 @@ export default CurrentBookingsScreen = () => {
         );
     };
     const renderBooking = ({ item }) => {
+        const eventStart = new Date(item.start_time);
+        const eventEnd = new Date(item.end_time);
         return (
             <MainUserBooking
-                date={item.date}
-                dateMonth={item.date.substr(5, 2)}
+                date={eventStart.toLocaleDateString()}
+                dateMonth={item.date}
                 title={item.title}
                 descriptionTime={
-                    item.start_time.substr(0, 5) +
+                    eventStart.toLocaleTimeString() +
                     " " +
-                    item.end_time.substr(0, 5)
+                    eventEnd.toLocaleTimeString()
                 }
                 descriptionLocation={item.location}
             />
@@ -79,6 +81,7 @@ export default CurrentBookingsScreen = () => {
         }
     }
     useEffect(() => {
+        console.log("Getting Data");
         getBookings();
     }, []);
     return (
@@ -107,7 +110,6 @@ export default CurrentBookingsScreen = () => {
             <View style={styles.topHeader}>
                 <Text style={styles.topHeaderText}>Date / Time</Text>
                 <Text style={styles.topHeaderText}>Title</Text>
-                <Text style={styles.topHeaderText}>Location</Text>
             </View>
             <View style={styles.bookingContainer}>
                 <FlatList

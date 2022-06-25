@@ -11,13 +11,47 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import placeholderImage from "../../../assets/placeholderImage.jpg";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-export default EventDetailScreen = () => {
+import RenderHtml from "react-native-render-html";
+import { supabase } from "../../../supabase";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
+
+export default EventDetailScreen = (props) => {
+    const user = supabase.auth.user();
+    const addEvent = async (eventDetail) => {
+        console.log("adding event");
+        console.log(eventDetail);
+        const { data, error } = await supabase.from("bookings").insert([
+            {
+                booking_id: String(uuidv4()),
+                user_id: user.id,
+                title: eventDetail.name,
+                start_time: eventDetail.startsOnNotFormatted,
+                end_time: eventDetail.endsOnNotFormatted,
+                location: eventDetail.location,
+            },
+        ]);
+
+        // console.log(data);
+    };
+    const eventDetail = props.route.params;
+    const eventStartDate = new Date(eventDetail.startsOnNotFormatted);
+    const eventEndDate = new Date(eventDetail.endsOnNotFormatted);
+    const source = {
+        html: eventDetail.description,
+    };
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.eventHeaderText}>
-                TeamNUS Table Tennis Trials 2022
-            </Text>
-            <Image source={placeholderImage} style={styles.image}></Image>
+            <Text style={styles.eventHeaderText}>{eventDetail.name}</Text>
+            <Image
+                source={{
+                    uri:
+                        "https://se-images.campuslabs.com/clink/images/" +
+                        eventDetail.imageUrl +
+                        "?preset=med-w",
+                }}
+                style={styles.image}
+            ></Image>
             <View style={styles.eventMainDetailsContainer}>
                 <View style={styles.eventDetailsWrapper}>
                     <MaterialCommunityIcons
@@ -25,7 +59,9 @@ export default EventDetailScreen = () => {
                         color={"#0C3370"}
                         size={20}
                     />
-                    <Text style={styles.eventDetailsText}>10 August 2022</Text>
+                    <Text style={styles.eventDetailsText}>
+                        {eventStartDate.toDateString()}
+                    </Text>
                 </View>
                 <View style={styles.eventDetailsWrapper}>
                     <MaterialCommunityIcons
@@ -33,7 +69,11 @@ export default EventDetailScreen = () => {
                         color={"#0C3370"}
                         size={20}
                     />
-                    <Text style={styles.eventDetailsText}>10 August 2022</Text>
+                    <Text style={styles.eventDetailsText}>
+                        {eventStartDate.toLocaleTimeString() +
+                            " - " +
+                            eventEndDate.toLocaleTimeString()}
+                    </Text>
                 </View>
                 <View style={styles.eventDetailsWrapper}>
                     <MaterialCommunityIcons
@@ -41,7 +81,9 @@ export default EventDetailScreen = () => {
                         color={"#0C3370"}
                         size={20}
                     />
-                    <Text style={styles.eventDetailsText}>10 August 2022</Text>
+                    <Text style={styles.eventDetailsText}>
+                        {eventDetail.location}
+                    </Text>
                 </View>
                 <View style={styles.eventDetailsWrapper}>
                     <MaterialCommunityIcons
@@ -49,7 +91,9 @@ export default EventDetailScreen = () => {
                         color={"#0C3370"}
                         size={20}
                     />
-                    <Text style={styles.eventDetailsText}>10 August 2022</Text>
+                    <Text style={styles.eventDetailsText}>
+                        {eventDetail.organizationName}
+                    </Text>
                 </View>
             </View>
             <View style={styles.eventSecondaryDetailsContainer}>
@@ -61,24 +105,21 @@ export default EventDetailScreen = () => {
                 >
                     Event Details:
                 </Text>
-                <Text style={styles.eventDetailsText}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean rhoncus justo vel ullamcorper tincidunt. Morbi
-                    molestie velit non arcu tempor iaculis. Aenean faucibus
-                    neque sed arcu bibendum imperdiet. Orci varius natoque
-                    penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Fusce vel mollis nulla. Pellentesque faucibus
-                    lectus at mi euismod, ut consectetur massa dapibus. Aliquam
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </Text>
+                <RenderHtml contentWidth={width} source={source} />
+                {/* <Text style={styles.eventDetailsText}>
+                    {eventDetail.description}
+                </Text> */}
             </View>
             <View style={styles.bottomContainer}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={[styles.button, { backgroundColor: "#FF6D03" }]}
                 >
                     <Text style={styles.buttonText}>Register Now</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
+                    onPress={() => {
+                        addEvent(eventDetail);
+                    }}
                     style={[styles.button, { backgroundColor: "#0C3370" }]}
                 >
                     <Text style={[styles.buttonText, { color: "white" }]}>
@@ -89,7 +130,7 @@ export default EventDetailScreen = () => {
         </ScrollView>
     );
 };
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
@@ -127,7 +168,7 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         width: "85%",
     },
     buttonText: {

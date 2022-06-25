@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { Link, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SplashScreen from "expo-splash-screen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -118,6 +118,22 @@ const Tab = createBottomTabNavigator();
 
 const prefix = Linking.createURL("/");
 function App() {
+    const [data, setData] = useState(null);
+
+    function handleDeepLink(event) {
+        setData(event);
+    }
+    useEffect(() => {
+        // const testEvent = Linking.getInitialURL().then((result) => {
+        //     console.log("url:" + result);
+        //     setData(result);
+        // });
+        const event = Linking.addEventListener("url", handleDeepLink);
+        return () => {
+            event.remove();
+        };
+    }, []);
+
     const linking = {
         prefixes: [prefix],
         config: {
@@ -144,9 +160,12 @@ function App() {
     useEffect(() => {
         setSession(supabase.auth.session());
 
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
+        supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setSession(session);
+            },
+            [session]
+        );
         async function prepare() {
             try {
                 // Keep the splash screen visible while we fetch resources
@@ -176,7 +195,14 @@ function App() {
     }
     return (
         <NavigationContainer linking={linking}>
-            {session ? <Home session={session} /> : <LoginNavigator />}
+            {session ? (
+                <Home session={session} />
+            ) : (
+                <LoginNavigator data={data} />
+                // <View style={{ marginTop: 50, alignItems: "center" }}>
+                //     <Text>{JSON.stringify(data)}</Text>
+                // </View>
+            )}
         </NavigationContainer>
     );
 }

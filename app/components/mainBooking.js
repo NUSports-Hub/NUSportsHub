@@ -13,11 +13,6 @@ export default MainUserBooking = (props) => {
             <View style={styles.bookingTitle}>
                 <Text style={styles.bookingText}>{props.title}</Text>
             </View>
-            <View style={styles.bookingLocation}>
-                <Text style={styles.bookingText}>
-                    {props.descriptionLocation}
-                </Text>
-            </View>
         </View>
     );
 };
@@ -33,18 +28,18 @@ const styles = StyleSheet.create({
         height: 0.11 * height,
     },
     bookingDateTimeWrapper: {
-        flex: 0.33,
+        flex: 0.25,
         alignItems: "center",
+
+        paddingHorizontal: 10,
     },
     bookingTitle: {
-        flex: 0.33,
-        alignItems: "center",
-    },
-    bookingLocation: {
-        flex: 0.33,
+        paddingHorizontal: 10,
+        flex: 0.75,
         alignItems: "center",
     },
     bookingText: {
         fontFamily: "Montserrat-SemiBold",
+        fontSize: 13,
     },
 });
