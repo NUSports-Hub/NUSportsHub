@@ -53,7 +53,7 @@ export default BookingsNavigator = () => {
                         backgroundColor: "#0C3370",
                     },
 
-                    headerTitle: "Bookings",
+                    headerTitle: "New Booking",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },
@@ -86,7 +86,7 @@ export default BookingsNavigator = () => {
                     headerStyle: {
                         backgroundColor: "#0C3370",
                     },
-                    headerTitle: "My Bookings",
+                    headerTitle: "My Events",
                     headerTitleStyle: {
                         fontFamily: "Montserrat-Bold",
                     },

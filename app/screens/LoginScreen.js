@@ -29,14 +29,20 @@ export default LoginScreen = () => {
         const { data, error } = await supabase.auth.api.resetPasswordForEmail(
             email,
             {
-                redirectTo:
-                    "exp://exp.host/@nusportshub/orbitalProject/--/ForgotPasswordScreen",
+                redirectTo: "exp://192.168.1.84:19000/--/ForgotPasswordScreen",
             }
         );
         if (error) {
             console.log(error.message);
+            console.log(error);
             setErrorMessage("");
-            setErrorMessage("Please input a valid email");
+            if (error.status == 422) {
+                setErrorMessage("Please input a valid email");
+            } else if (error.status == 429) {
+                setErrorMessage(
+                    "Request limit exceeded. Please wait 60 seconds before trying again."
+                );
+            }
         } else {
             Alert.alert("An email has been sent to your registered email.");
         }
@@ -47,11 +53,15 @@ export default LoginScreen = () => {
             email: email,
             password: password,
         });
+        // if (user) {
+        //     navigation.navigate("Home");
+        // }
         if (error) {
             console.log(error.message);
             setErrorMessage("");
             setErrorMessage("Invalid Login Credentials");
         }
+
         // setLoading(false);
     }
 

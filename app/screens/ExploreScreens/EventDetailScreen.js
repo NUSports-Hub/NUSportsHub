@@ -7,16 +7,19 @@ import {
     Dimensions,
     ScrollView,
 } from "react-native";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import placeholderImage from "../../../assets/placeholderImage.jpg";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import RenderHtml from "react-native-render-html";
 import { supabase } from "../../../supabase";
-import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import "react-native-get-random-values";
+import * as Animatable from "react-native-animatable";
 
 export default EventDetailScreen = (props) => {
+    const [message, setMessage] = useState("");
     const user = supabase.auth.user();
     const addEvent = async (eventDetail) => {
         console.log("adding event");
@@ -110,15 +113,27 @@ export default EventDetailScreen = (props) => {
                     {eventDetail.description}
                 </Text> */}
             </View>
+            <View>
+                {message ? (
+                    <Animatable.Text
+                        animation="shake"
+                        style={styles.messageText}
+                    >
+                        {message}
+                    </Animatable.Text>
+                ) : null}
+            </View>
             <View style={styles.bottomContainer}>
                 {/* <TouchableOpacity
                     style={[styles.button, { backgroundColor: "#FF6D03" }]}
                 >
                     <Text style={styles.buttonText}>Register Now</Text>
                 </TouchableOpacity> */}
+
                 <TouchableOpacity
                     onPress={() => {
                         addEvent(eventDetail);
+                        setMessage("Successfully added to events calendar!");
                     }}
                     style={[styles.button, { backgroundColor: "#0C3370" }]}
                 >
@@ -177,5 +192,12 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 5,
         padding: 15,
+        marginVertical: 20,
+    },
+    messageText: {
+        fontFamily: "Montserrat-SemiBold",
+        color: "green",
+        marginTop: 10,
+        paddingHorizontal: 40,
     },
 });

@@ -9,7 +9,7 @@ export default BookingsMainScreen = () => {
                 style={[styles.bookingWrapper, { backgroundColor: "#FF6D03" }]}
                 onPress={() => navigation.navigate("CurrentBookingsScreen")}
             >
-                <Text style={styles.buttonText}>Check current bookings</Text>
+                <Text style={styles.buttonText}>View current calendar</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.bookingWrapper, { backgroundColor: "#0C3370" }]}

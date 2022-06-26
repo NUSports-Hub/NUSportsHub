@@ -6,19 +6,20 @@ import ForgotPasswordScreen from "./ForgotPasswordScreen";
 const Stack = createStackNavigator();
 
 export default LoginNavigator = (data) => {
+    console.log("hash=" + data.hash);
     const navigation = useNavigation();
-    console.log(data);
     return (
         <Stack.Navigator>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name="LoginScreen"
-                component={LoginScreen}
+                name="ForgotPasswordScreen"
+                component={ForgotPasswordScreen}
+                initialParams={{ hash: data.hash }}
             />
             <Stack.Screen
                 options={{ headerShown: false }}
-                name="ForgotPasswordScreen"
-                component={ForgotPasswordScreen}
+                name="LoginScreen"
+                component={LoginScreen}
             />
         </Stack.Navigator>
     );

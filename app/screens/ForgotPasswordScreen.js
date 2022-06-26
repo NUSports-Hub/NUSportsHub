@@ -11,55 +11,45 @@ import {
     View,
     Alert,
 } from "react-native";
-//import { useNavigation } from "@react-navigation/native";
-import * as RootNavigation from "/Users/admin/Desktop/Orbital Dev4/NUSportsHub/app/screens/RootNavigation.js";
+import { useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
 
-export default ForgotPasswordScreen = ({ hash }) => {
+export default ForgotPasswordScreen = (data) => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
     const [errorMessage, setErrorMessage] = useState("");
-    //const [type, setType] = useState(null)
-
-    //const [url, setUrl] = useState(null)
-    //const [hash, setHash] = useState(null)
-
-    //useEffect(() => {
-    //setUrl(Linking.addEventListener('url'))
-    //setHash(url.substring(url.indexOf('#')))
-    //}, [])
-
+    const hash = data.route.params.hash;
     async function ChangePassword() {
         try {
-            if (!hash) {
-                RootNavigation.navigate("Home")
-                Alert.alert("Please generate another reset email")
-            }
-            else if (hash) {
-                const accessToken = hash.split("=")[1].split("&")[0]
+            console.log(hash);
+            if (hash.includes("error_code=404")) {
+                navigation.navigate("LoginScreen");
+                Alert.alert(
+                    "Your reset token has expired. \nPlease generate another reset email"
+                );
+            } else {
+                const accessToken = hash.split("=")[1].split("&")[0];
 
-                const { error } = await supabase.auth.api.updateUser(accessToken, {
-                    password: password,
-                });
+                const { error } = await supabase.auth.api.updateUser(
+                    accessToken,
+                    {
+                        password: password,
+                    }
+                );
                 if (error) {
                     console.log(error);
                     setErrorMessage("");
-                    setErrorMessage("New password is not identical")
-                }
-                else if (!error) {
-                    RootNavigation.navigate("Home")
-                    Alert.alert("Password Updated")
+                    setErrorMessage(error.message);
+                } else if (!error) {
+                    navigation.navigate("LoginScreen");
+                    Alert.alert("Your password has been reset successfully.");
                 }
             }
-
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
-
-    // async function ChangePassword() {
-    //     const { user, error } = await supabase.auth.update({ password: password })
-    // };
 
     return (
         <KeyboardAvoidingView
@@ -82,11 +72,21 @@ export default ForgotPasswordScreen = ({ hash }) => {
                     secureTextEntry
                 />
             </View>
+            <View>
+                {errorMessage ? (
+                    <Animatable.Text animation="shake" style={styles.errorText}>
+                        {errorMessage}
+                    </Animatable.Text>
+                ) : null}
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
                         if (password === confirmPassword) {
-                            ChangePassword()
+                            ChangePassword();
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Passwords are not identical.");
                         }
                     }}
                 >

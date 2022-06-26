@@ -7,7 +7,7 @@ export default BookingsPlatformScreen = () => {
         <View style={styles.container}>
             <TouchableOpacity
                 style={[styles.bookingWrapper, { backgroundColor: "#FF6D03" }]}
-                onPress={() => navigation.navigate("CurrentBookingsScreen")}
+                onPress={() => navigation.navigate("SelectActivityScreen")}
             >
                 <Text style={styles.buttonText}>Reboks</Text>
             </TouchableOpacity>

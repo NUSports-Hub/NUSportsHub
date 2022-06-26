@@ -12,31 +12,29 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 export default PasswordResetScreen = () => {
-
-    const [errorMessage, setErrorMessage] = useState("")
-    const [newPassword, setNewPassword] = useState(null)
-    const [confirmPassword, setConfirmPassword] = useState(null)
-    const navigation = useNavigation()
-
+    const [errorMessage, setErrorMessage] = useState("");
+    const [newPassword, setNewPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState(null);
+    const navigation = useNavigation();
 
     const user = supabase.auth.user();
 
     async function ChangePassword() {
-
-        const { user, error } = await supabase.auth.update({ password: newPassword })
+        const { user, error } = await supabase.auth.update({
+            password: newPassword,
+        });
         if (error) {
-            console.log(error.message);
+            console.log(error);
             setErrorMessage("");
-            setErrorMessage("New password is not identical")
+            setErrorMessage(error.message);
+        } else {
+            navigation.navigate("ProfileScreen");
+            Alert.alert("Password successfully changed.");
         }
-        else {
-            navigation.navigate("ProfileScreen")
-            Alert.alert("Password successfully changed")
-        }
-    };
-
+    }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -56,16 +54,24 @@ export default PasswordResetScreen = () => {
                     secureTextEntry
                 />
             </View>
+            <View>
+                {errorMessage ? (
+                    <Animatable.Text animation="shake" style={styles.errorText}>
+                        {errorMessage}
+                    </Animatable.Text>
+                ) : null}
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
-
                         if (newPassword === confirmPassword) {
-                            ChangePassword()
+                            ChangePassword();
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Passwords are not identical.");
                         }
                     }}
                     style={[styles.button]}
-
                 >
                     <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>

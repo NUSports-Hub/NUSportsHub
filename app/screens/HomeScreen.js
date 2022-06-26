@@ -166,7 +166,7 @@ export default HomeScreen = () => {
             <View style={styles.componentHeader}>
                 <View style={styles.componentHeaderLabel}>
                     <Text style={styles.componentText}>
-                        Your upcoming bookings
+                        Your upcoming events
                     </Text>
                     <MaterialCommunityIcons
                         name="calendar"

@@ -124,17 +124,24 @@ function App() {
     const [data, setData] = useState(null);
     const [url, setUrl] = useState("");
     const [hash, setHash] = useState(null);
+    const user = supabase.auth.user();
 
     function handleDeepLink(event) {
-        let data = Linking.parse(event.url);
+        console.log("app opened");
         setUrl(event.url);
         setHash(event.url.split("#")[1]);
         setData(event);
     }
     useEffect(() => {
         async function getInitialUrl() {
+            console.log("app not opened");
             const initialUrl = await Linking.getInitialURL();
-            if (initialUrl) setData(Linking.parse(initialUrl));
+            console.log(initialUrl);
+            if (initialUrl) {
+                setUrl(initialUrl);
+                setHash(initialUrl.split("#")[1]);
+                setData(Linking.parse(initialUrl));
+            }
         }
         const event = Linking.addEventListener("url", handleDeepLink);
         if (!data) {
@@ -149,14 +156,6 @@ function App() {
         prefixes: [prefix],
         config: {
             screens: {
-                Home: "Home",
-                // Profile: "Profile",
-                // Bookings: {
-                //     screens: {
-                //         Bookings: "Bookings",
-                //         BookingsPlatformScreen: "BookingsPlatformScreen",
-                //     },
-                // },
                 ForgotPasswordScreen: {
                     screens: {
                         LoginScreen: "LoginScreen",
@@ -172,10 +171,13 @@ function App() {
 
     useEffect(() => {
         setSession(supabase.auth.session());
-
         supabase.auth.onAuthStateChange(
             (_event, session) => {
                 setSession(session);
+                console.log("session changed");
+                if (session) {
+                    setHash(null);
+                }
             },
             [session]
         );
@@ -208,12 +210,12 @@ function App() {
     }
     return (
         <NavigationContainer linking={linking}>
-            {hash ? (
-                <ForgotPasswordScreen hash={hash} />
-            ) : session ? (
+            {session ? (
                 <Home session={session} />
+            ) : hash ? (
+                <LoginNavigator hash={hash} />
             ) : (
-                <LoginNavigator />
+                <LoginScreen />
             )}
         </NavigationContainer>
     );
