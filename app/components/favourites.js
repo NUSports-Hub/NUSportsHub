@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         height: 0.1 * height,
     },
     icon: {
-        flex: 0.1,
+        flex: 0.15,
     },
     favouriteName: {
         textAlign: "center",
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#FF6D03",
         borderRadius: 10,
-        flex: 0.35,
+        flex: 0.3,
         marginRight: 10,
     },
 });
