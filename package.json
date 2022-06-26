@@ -20,6 +20,8 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@react-navigation/stack": "^6.2.1",
+    "@rneui/base": "^4.0.0-rc.5",
+    "@rneui/themed": "^4.0.0-rc.5",
     "@supabase/supabase-js": "^1.35.3",
     "cheerio": "^1.0.0-rc.11",
     "expo": "~45.0.0",

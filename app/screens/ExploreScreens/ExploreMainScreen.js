@@ -19,45 +19,6 @@ import {
     eventList,
 } from "../../components/fetchNusyncEvents";
 
-const eventsData = [
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-    {
-        name: "TeamNUS Badminton Open 2022",
-        date: "Mon, Jun 30, 2022",
-    },
-];
-
-// const renderEvent = ({ item }) => (
-//     <UserEvent name={item.name} date={item.date} />
-// );
-
 const renderEvent = ({ item }) => {
     const formatStartDate = new Date(Date.parse(item.startsOn));
     const formatEndDate = new Date(Date.parse(item.endsOn));
@@ -87,10 +48,10 @@ export default ExploreMainScreen = () => {
         const loadEvents = async () => {
             await FetchNusyncEvent();
             setData(eventList);
+            setLoading(true);
         };
         loadEvents();
         console.log(data);
-        setLoading(true);
     }, []);
     return (
         <View>
@@ -166,7 +127,6 @@ const styles = StyleSheet.create({
         height: 0.75 * height,
     },
     loading: {
-        paddingTop: 0.3 * height,
         alignItems: "center",
         justifyContent: "center",
     },

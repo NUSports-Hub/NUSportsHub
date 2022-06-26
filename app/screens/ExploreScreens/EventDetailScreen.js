@@ -21,21 +21,43 @@ import * as Animatable from "react-native-animatable";
 export default EventDetailScreen = (props) => {
     const [message, setMessage] = useState("");
     const user = supabase.auth.user();
-    const addEvent = async (eventDetail) => {
-        console.log("adding event");
-        console.log(eventDetail);
-        const { data, error } = await supabase.from("bookings").insert([
-            {
-                booking_id: String(uuidv4()),
-                user_id: user.id,
-                title: eventDetail.name,
-                start_time: eventDetail.startsOnNotFormatted,
-                end_time: eventDetail.endsOnNotFormatted,
-                location: eventDetail.location,
-            },
-        ]);
 
-        // console.log(data);
+    const addEvent = async (eventDetail) => {
+        var eventExists = false;
+        console.log(eventDetail);
+        let { data: bookings, error } = await supabase
+            .from("bookings")
+            .select(`title,start_time,end_time,date,location`)
+            .eq("user_id", user.id);
+
+        if (bookings) {
+            bookings.forEach((booking) => {
+                if (
+                    booking.title == eventDetail.name &&
+                    booking.start_time == eventDetail.startsOnNotFormatted
+                ) {
+                    console.log("Already exist");
+                    eventExists = true;
+                }
+            });
+            if (eventExists == false) {
+                console.log("Adding event");
+                const { data, error } = await supabase.from("bookings").insert([
+                    {
+                        booking_id: String(uuidv4()),
+                        user_id: user.id,
+                        title: eventDetail.name,
+                        start_time: eventDetail.startsOnNotFormatted,
+                        end_time: eventDetail.endsOnNotFormatted,
+                        location: eventDetail.location,
+                    },
+                ]);
+                setMessage("Successfully added to events calendar!");
+            } else {
+                setMessage("");
+                setMessage("Event already exists in calendar.");
+            }
+        }
     };
     const eventDetail = props.route.params;
     const eventStartDate = new Date(eventDetail.startsOnNotFormatted);
@@ -116,7 +138,7 @@ export default EventDetailScreen = (props) => {
             <View>
                 {message ? (
                     <Animatable.Text
-                        animation="shake"
+                        animation="fadeIn"
                         style={styles.messageText}
                     >
                         {message}
@@ -133,7 +155,6 @@ export default EventDetailScreen = (props) => {
                 <TouchableOpacity
                     onPress={() => {
                         addEvent(eventDetail);
-                        setMessage("Successfully added to events calendar!");
                     }}
                     style={[styles.button, { backgroundColor: "#0C3370" }]}
                 >

@@ -20,6 +20,8 @@ import FacilityCapacity from "../components/capacity";
 import { FetchCapacityCall } from "../components/fetchCapacity.js";
 import UserFavourites from "../components/favourites";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { v4 as uuidv4 } from "uuid";
+import "react-native-get-random-values";
 const { width, height } = Dimensions.get("window");
 const userFavouritesData = [
     {
@@ -53,10 +55,11 @@ export default HomeScreen = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [userBookings, setUserBookings] = useState([]);
+    const [userFavourites, setUserFavourites] = useState([]);
     useFocusEffect(
         React.useCallback(() => {
+            getFavourites();
             getBookings();
-            console.log("Getting bookings...");
         }, [])
     );
     async function getBookings() {
@@ -85,8 +88,32 @@ export default HomeScreen = () => {
             setLoading(false);
         }
     }
+    async function getFavourites() {
+        try {
+            const user = supabase.auth.user();
+            console.log(user.id);
+            let { data, error, status } = await supabase
+                .from("favourites")
+                .select(`iconName,favouriteName`)
+                .eq("user_id", user.id);
+
+            if (data) {
+                console.log(data);
+                console.log("Getting Data");
+                setUserFavourites(data);
+            } else {
+                console.log("No data found");
+            }
+            if (error && status !== 406) {
+                throw error;
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
     useEffect(() => {
         getBookings();
+        getFavourites();
     }, []);
     const renderBooking = ({ item }) => {
         const eventStart = new Date(item.start_time);
@@ -109,18 +136,54 @@ export default HomeScreen = () => {
     const renderCapacity = ({ item }) => (
         <FacilityCapacity name={item.name} capacity={item.capacity} />
     );
-    const renderFavourites = ({ item }) => (
-        <UserFavourites
-            iconName={item.iconName}
-            favouriteName={item.favouriteName}
-        />
-    );
+    const renderFavourites = ({ item }) => {
+        const user = supabase.auth.user();
+        const deleteFavourite = async () => {
+            console.log("deleting favourite");
+            const { data, error } = await supabase
+                .from("favourites")
+                .delete()
+                .eq("iconName", item.iconName);
+            console.log(data);
+            getFavourites();
+        };
+        return (
+            <View style={styles.favouriteContainer}>
+                <UserFavourites
+                    iconName={item.iconName}
+                    favouriteName={item.favouriteName}
+                />
+                <TouchableOpacity
+                    style={styles.icon2}
+                    onPress={() => {
+                        deleteFavourite();
+                    }}
+                >
+                    <MaterialCommunityIcons
+                        name={"trash-can-outline"}
+                        color={"white"}
+                        size={20}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     const emptyComponent = () => {
         return (
             <View style={styles.emptyComponent}>
                 <Text style={styles.emptyComponentText}>
                     You have no upcoming events.
+                </Text>
+            </View>
+        );
+    };
+
+    const emptyComponentFavourites = () => {
+        return (
+            <View style={styles.emptyComponent}>
+                <Text style={styles.emptyComponentText}>
+                    You do not have any favourites!
                 </Text>
             </View>
         );
@@ -239,10 +302,10 @@ export default HomeScreen = () => {
             <View style={styles.wrapper}>
                 <FlatList
                     ItemSeparatorComponent={bookingDivider}
-                    data={userFavouritesData}
+                    data={userFavourites}
                     renderItem={renderFavourites}
                     showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={emptyComponent}
+                    ListEmptyComponent={emptyComponentFavourites}
                 />
             </View>
         </SafeAreaView>
@@ -285,5 +348,13 @@ const styles = StyleSheet.create({
     emptyComponentText: {
         fontFamily: "Montserrat-Medium",
         color: "white",
+    },
+    favouriteContainer: {
+        flexDirection: "row",
+    },
+    icon2: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginRight: 10,
     },
 });

@@ -8,14 +8,27 @@ import {
     TextInput,
     FlatList,
     Dimensions,
+    TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MainUserBooking from "../../components/mainBooking";
+import { useFocusEffect } from "@react-navigation/native";
+import * as React from "react";
+import { Overlay } from "@rneui/themed";
 const { width, height } = Dimensions.get("window");
 export default CurrentBookingsScreen = () => {
     const [loading, setLoading] = useState(false);
     const [userBookings, setUserBookings] = useState([]);
+    const [visible, setVisible] = useState(false);
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+    useFocusEffect(
+        React.useCallback(() => {
+            getBookings();
+            console.log("Getting bookings...");
+        }, [])
+    );
     const emptyComponent = () => {
         return (
             <View style={styles.emptyComponent}>
@@ -40,18 +53,86 @@ export default CurrentBookingsScreen = () => {
     const renderBooking = ({ item }) => {
         const eventStart = new Date(item.start_time);
         const eventEnd = new Date(item.end_time);
+        const deleteEvent = async () => {
+            console.log("deleting event");
+            const { data, error } = await supabase
+                .from("bookings")
+                .delete()
+                .eq("title", item.title)
+                .eq("start_time", item.start_time)
+                .eq("end_time", item.end_time);
+
+            console.log(data);
+            getBookings();
+        };
         return (
-            <MainUserBooking
-                date={eventStart.toLocaleDateString()}
-                dateMonth={item.date}
-                title={item.title}
-                descriptionTime={
-                    eventStart.toLocaleTimeString() +
-                    " " +
-                    eventEnd.toLocaleTimeString()
-                }
-                descriptionLocation={item.location}
-            />
+            <View>
+                <TouchableOpacity onPress={toggleOverlay}>
+                    <MainUserBooking
+                        date={eventStart.toLocaleDateString()}
+                        title={item.title}
+                        descriptionTime={
+                            eventStart.toLocaleTimeString() +
+                            " " +
+                            eventEnd.toLocaleTimeString()
+                        }
+                        descriptionLocation={item.location}
+                        start_time={item.start_time}
+                        end_time={item.end_time}
+                    />
+                </TouchableOpacity>
+                <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <View style={styles.container}>
+                        <Text style={styles.eventHeaderText}>{item.title}</Text>
+                        <View style={styles.eventMainDetailsContainer}>
+                            <View style={styles.eventDetailsWrapper}>
+                                <MaterialCommunityIcons
+                                    name="calendar"
+                                    color={"#0C3370"}
+                                    size={20}
+                                />
+                                <Text style={styles.eventDetailsText}>
+                                    {item.start_time.slice(0, 15)}
+                                </Text>
+                            </View>
+                            <View style={styles.eventDetailsWrapper}>
+                                <MaterialCommunityIcons
+                                    name="clock"
+                                    color={"#0C3370"}
+                                    size={20}
+                                />
+                                <Text style={styles.eventDetailsText}>
+                                    {eventStart.toLocaleTimeString() +
+                                        " - " +
+                                        eventEnd.toLocaleTimeString()}
+                                </Text>
+                            </View>
+                            <View style={styles.eventDetailsWrapper}>
+                                <MaterialCommunityIcons
+                                    name="map-marker"
+                                    color={"#0C3370"}
+                                    size={20}
+                                />
+                                <Text style={styles.eventDetailsText}>
+                                    {item.location}
+                                </Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                console.log("deleting event");
+                                deleteEvent();
+                                toggleOverlay();
+                            }}
+                        >
+                            <Text style={styles.buttonText}>
+                                Delete event from calendar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </Overlay>
+            </View>
         );
     };
     async function getBookings() {
@@ -173,5 +254,40 @@ const styles = StyleSheet.create({
     emptyComponentText: {
         fontFamily: "Montserrat-Medium",
         color: "black",
+    },
+    container: {
+        alignItems: "center",
+        padding: 20,
+        width: 0.8 * width,
+        height: 0.4 * height,
+    },
+    eventHeaderText: {
+        fontFamily: "Montserrat-Bold",
+        fontSize: 20,
+        marginBottom: 15,
+    },
+    eventMainDetailsContainer: {
+        width: "90%",
+        backgroundColor: "#E2DFDF",
+        borderRadius: 5,
+        padding: 10,
+    },
+    eventDetailsWrapper: {
+        flexDirection: "row",
+        padding: 5,
+    },
+    eventDetailsText: {
+        fontFamily: "Montserrat-SemiBold",
+        paddingLeft: 5,
+    },
+    buttonText: {
+        fontFamily: "Montserrat-SemiBold",
+        color: "white",
+    },
+    button: {
+        borderRadius: 5,
+        padding: 15,
+        marginVertical: 20,
+        backgroundColor: "#0C3370",
     },
 });

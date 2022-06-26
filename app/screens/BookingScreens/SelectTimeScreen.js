@@ -5,12 +5,16 @@ import {
     Button,
     Dimensions,
     FlatList,
+    Alert,
 } from "react-native";
+import { supabase } from "../../../supabase";
 import { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native";
 import BookingTiming from "../../components/bookingTiming";
+import { v4 as uuidv4 } from "uuid";
+import "react-native-get-random-values";
 import {
     FetchLoginTreeckle,
     accessToken,
@@ -18,6 +22,7 @@ import {
 const { width, height } = Dimensions.get("window");
 FetchLoginTreeckle();
 export default SelectTimeScreen = (props) => {
+    const user = supabase.auth.user();
     const bookingTemplate = [
         // {
         //     time: "0000",
@@ -314,7 +319,35 @@ export default SelectTimeScreen = (props) => {
     const [bookingData, setBookingData] = useState([]);
     const [selectedTiming, setSelectedTiming] = useState([]);
     const [doneLoading, setDoneLoading] = useState(false);
-
+    const addToFavourites = async () => {
+        var favouriteExists = false;
+        let { data: favourites, error } = await supabase
+            .from("favourites")
+            .select(`iconName`)
+            .eq("user_id", user.id);
+        if (favourites) {
+            favourites.forEach((favourite) => {
+                if (favourite.iconName == props.route.params.iconName) {
+                    console.log("Already exist");
+                    favouriteExists = true;
+                }
+            });
+            if (favouriteExists == false) {
+                console.log("Adding favourite");
+                const { data } = await supabase.from("favourites").insert([
+                    {
+                        favourite_id: String(uuidv4()),
+                        user_id: user.id,
+                        iconName: props.route.params.iconName,
+                        favouriteName: props.route.params.activityName,
+                    },
+                ]);
+                Alert.alert("Added activity to your favourites.");
+            } else {
+                Alert.alert("Activity is already in your favourites.");
+            }
+        }
+    };
     const fetchBookingTimings = async (date) => {
         const startTime = date.getTime();
         const endTime = startTime + 86400000;
@@ -492,6 +525,18 @@ export default SelectTimeScreen = (props) => {
                 />
             </View>
             <View>
+                <TouchableOpacity
+                    style={styles.addFavouriteButton}
+                    onPress={() => {
+                        addToFavourites();
+                    }}
+                >
+                    <Text style={styles.addFavouriteButtonText}>
+                        Add to favourites
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View>
                 <Text style={styles.headerText}>Select a date:</Text>
             </View>
             <View style={styles.selectedDateContainer}>
@@ -551,6 +596,7 @@ const styles = StyleSheet.create({
     },
     activityBox: {
         marginLeft: 15,
+        flexDirection: "row",
     },
     selectedDateContainer: {
         flexDirection: "row",
@@ -602,5 +648,20 @@ const styles = StyleSheet.create({
     continueButtonText: {
         fontFamily: "Montserrat-Bold",
         color: "white",
+    },
+    addFavouriteButton: {
+        backgroundColor: "#FF6D03",
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center",
+        padding: 15,
+        marginTop: 10,
+        borderRadius: 10,
+        width: 0.9 * width,
+    },
+    addFavouriteButtonText: {
+        fontFamily: "Montserrat-Bold",
+        color: "white",
+        fontSize: 12,
     },
 });

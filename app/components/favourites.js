@@ -6,7 +6,9 @@ import {
     TouchableOpacity,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
 export default UserFavourites = (props) => {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons
@@ -16,7 +18,18 @@ export default UserFavourites = (props) => {
                 size={35}
             />
             <Text style={styles.favouriteName}>{props.favouriteName}</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+                style={styles.bookButton}
+                onPress={() => {
+                    navigation.navigate("Bookings", {
+                        screen: "SelectTimeScreen",
+                        params: {
+                            iconName: props.iconName,
+                            activityName: props.favouriteName,
+                        },
+                    });
+                }}
+            >
                 <Text style={styles.bookButtonText}>Book Now</Text>
             </TouchableOpacity>
         </View>
@@ -26,27 +39,34 @@ export default UserFavourites = (props) => {
 const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         flexDirection: "row",
-        justifyContent: "space-between",
         alignItems: "center",
         padding: 10,
-        height: 0.11 * height,
+        height: 0.1 * height,
     },
     icon: {
-        marginLeft: 10,
+        flex: 0.1,
     },
     favouriteName: {
+        textAlign: "center",
+        flex: 0.55,
         fontFamily: "Montserrat-Bold",
         color: "white",
         fontSize: 18,
     },
     bookButtonText: {
-        marginRight: 10,
-        borderRadius: 10,
-        padding: 10,
+        padding: 7,
         color: "white",
         fontSize: 13,
         fontFamily: "Montserrat-SemiBold",
+    },
+    bookButton: {
+        alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#FF6D03",
+        borderRadius: 10,
+        flex: 0.35,
+        marginRight: 10,
     },
 });

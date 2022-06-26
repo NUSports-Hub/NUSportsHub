@@ -29,7 +29,8 @@ export default LoginScreen = () => {
         const { data, error } = await supabase.auth.api.resetPasswordForEmail(
             email,
             {
-                redirectTo: "exp://192.168.1.84:19000/--/ForgotPasswordScreen",
+                redirectTo:
+                    "exp://exp.host/@nusportshub/orbitalProject/--/ForgotPasswordScreen",
             }
         );
         if (error) {

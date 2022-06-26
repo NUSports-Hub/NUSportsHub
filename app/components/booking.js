@@ -29,16 +29,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         padding: 5,
         alignItems: "center",
-        height: 0.15 * height,
+        height: 0.12 * height,
     },
     bookingDateWrapper: {
-        flex: 0.15,
+        flex: 0.12,
         justifyContent: "center",
         alignItems: "center",
         margin: 10,
     },
     bookingDetailsWrapper: {
-        flex: 0.85,
+        flex: 0.88,
         margin: 5,
         justifyContent: "center",
     },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     },
     bookingTitle: {
         fontFamily: "Montserrat-SemiBold",
-        fontSize: 18,
+        fontSize: 15,
         color: "white",
     },
     bookingDescription: {
