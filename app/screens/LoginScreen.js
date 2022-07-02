@@ -80,7 +80,7 @@ export default LoginScreen = () => {
                 setErrorMessage("Email is already registered");
             } else if (error.message.includes("requires a valid password")) {
                 setErrorMessage("");
-                setErrorMessage("Please enter a valid password");
+                setErrorMessage("Please enter a valid password and email");
             } else if (error.message.includes("8 characters")) {
                 setErrorMessage("");
                 setErrorMessage("Password should be at least 8 characters");
@@ -145,12 +145,7 @@ export default LoginScreen = () => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {
-                        if (email.includes("gmail")) {
-                            signInWithEmail();
-                        } else {
-                            setErrorMessage("");
-                            setErrorMessage("Please input a valid NUS email");
-                        }
+                        signInWithEmail();
                     }}
                     style={styles.button}
                 >

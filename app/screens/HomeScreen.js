@@ -241,6 +241,7 @@ export default HomeScreen = () => {
                     onPress={() =>
                         navigation.navigate("Bookings", {
                             screen: "CurrentBookingsScreen",
+                            initial: false,
                         })
                     }
                 >

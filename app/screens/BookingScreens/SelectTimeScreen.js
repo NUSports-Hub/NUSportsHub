@@ -20,7 +20,6 @@ import {
     accessToken,
 } from "../../components/fetchLoginTreeckle";
 const { width, height } = Dimensions.get("window");
-FetchLoginTreeckle();
 export default SelectTimeScreen = (props) => {
     const user = supabase.auth.user();
     const bookingTemplate = [
@@ -352,6 +351,7 @@ export default SelectTimeScreen = (props) => {
         const startTime = date.getTime();
         const endTime = startTime + 86400000;
         var myHeaders = new Headers();
+        console.log(accessToken);
         myHeaders.append("Authorization", "Bearer " + accessToken);
 
         var requestOptions = {
@@ -371,7 +371,6 @@ export default SelectTimeScreen = (props) => {
                 return response.json();
             })
             .then((result) => {
-                console.log(result);
                 if (result.length !== 0) {
                     result.forEach((booking) => {
                         const title = booking.title;
@@ -428,7 +427,11 @@ export default SelectTimeScreen = (props) => {
         setSelectedTiming([]);
         date.setHours(0, 0, 0, 0);
         console.log("Getting data from Treeckle for " + date);
-        fetchBookingTimings(date);
+        const login = async () => {
+            await FetchLoginTreeckle();
+            fetchBookingTimings(date);
+        };
+        login();
     }, [date]);
 
     const bookingDivider = () => {
@@ -628,7 +631,7 @@ const styles = StyleSheet.create({
         width: 0.9 * width,
         alignSelf: "center",
         borderRadius: 5,
-        height: 0.45 * height,
+        height: 0.375 * height,
     },
     loadingText: {
         fontFamily: "Montserrat-Bold",

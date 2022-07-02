@@ -19,6 +19,7 @@ import { supabase } from "./supabase.js";
 import "react-native-url-polyfill/auto";
 import * as Linking from "expo-linking";
 import ForgotPasswordScreen from "./app/screens/ForgotPasswordScreen.js";
+
 //import { navigationRef } from "./app/screens/RootNavigation.js";
 
 function Home({ session }) {
@@ -128,16 +129,18 @@ function App() {
 
     function handleDeepLink(event) {
         console.log("app opened");
-        setUrl(event.url);
-        setHash(event.url.split("#")[1]);
-        setData(event);
+        if (event.url.includes("&type=recovery")) {
+            setUrl(event.url);
+            setHash(event.url.split("#")[1]);
+            setData(event);
+        }
     }
     useEffect(() => {
         async function getInitialUrl() {
             console.log("app not opened");
             const initialUrl = await Linking.getInitialURL();
             console.log(initialUrl);
-            if (initialUrl) {
+            if (initialUrl && initialUrl.includes("&type=recovery")) {
                 setUrl(initialUrl);
                 setHash(initialUrl.split("#")[1]);
                 setData(Linking.parse(initialUrl));
