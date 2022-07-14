@@ -463,7 +463,7 @@ export default SelectTimeScreen = (props) => {
     ];
     const onChange = (event, selectedDate) => {
         console.log(event);
-        console.log(selectedDate);
+        console.log("selected date: " + selectedDate);
         const currentDate = selectedDate;
         setShow(false);
         setDate(currentDate);
@@ -583,7 +583,12 @@ export default SelectTimeScreen = (props) => {
                     <Text style={styles.loadingText}>Getting data...</Text>
                 )}
             </View>
-            <TouchableOpacity style={styles.continueButton}>
+            <TouchableOpacity
+                style={styles.continueButton}
+                onPress={() => {
+                    console.log(selectedTiming.sort());
+                }}
+            >
                 <Text style={styles.continueButtonText}>Continue</Text>
             </TouchableOpacity>
         </View>
