@@ -21,7 +21,10 @@ import * as Linking from "expo-linking";
 import ForgotPasswordScreen from "./app/screens/ForgotPasswordScreen.js";
 
 //import { navigationRef } from "./app/screens/RootNavigation.js";
-
+const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+RCTNetworking.clearCookies((result) => {
+    console.log(result); //true if successfully cleared
+});
 function Home({ session }) {
     return (
         <Tab.Navigator
