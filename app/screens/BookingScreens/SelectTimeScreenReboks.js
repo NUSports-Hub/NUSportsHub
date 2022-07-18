@@ -16,303 +16,61 @@ import { TouchableOpacity } from "react-native";
 import BookingTiming from "../../components/bookingTiming";
 import { v4 as uuidv4 } from "uuid";
 import "react-native-get-random-values";
-// import {
-//     FetchLoginTreeckle,
-//     accessToken,
-// } from "../../components/fetchLoginTreeckle";
+import * as cheerio from "cheerio";
+import { val } from "cheerio/lib/api/attributes";
 const { width, height } = Dimensions.get("window");
 export default SelectTimeScreen = (props) => {
     const navigation = useNavigation();
     const accessToken = props.route.params.accessToken;
     const user = supabase.auth.user();
     const bookingTemplate = [
-        // {
-        //     time: "0000",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0030",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0100",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0130",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0200",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0230",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0300",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0330",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0400",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0430",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0500",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0530",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0600",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
-        // {
-        //     time: "0630",
-        //     title: "",
-        //     bookerName: "",
-        //     bookerEmail: "",
-        // },
         {
-            time: "0700",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "09:00",
+            disabled: false,
         },
         {
-            time: "0730",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "10:00",
+            disabled: false,
         },
         {
-            time: "0800",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "11:00",
+            disabled: false,
         },
         {
-            time: "0830",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "12:00",
+            disabled: false,
         },
         {
-            time: "0900",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "13:00",
+            disabled: false,
         },
         {
-            time: "0930",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "14:00",
+            disabled: false,
         },
         {
-            time: "1000",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "15:00",
+            disabled: false,
         },
         {
-            time: "1030",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "16:00",
+            disabled: false,
         },
         {
-            time: "1100",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "17:00",
+            disabled: false,
         },
         {
-            time: "1130",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "18:00",
+            disabled: false,
         },
         {
-            time: "1200",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "19:00",
+            disabled: false,
         },
         {
-            time: "1230",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1300",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1330",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1400",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1430",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1500",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1530",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1600",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1630",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1700",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1730",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1800",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1830",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1900",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "1930",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2000",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2030",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2100",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2130",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2200",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2230",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2300",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
-        },
-        {
-            time: "2330",
-            title: "",
-            bookerName: "",
-            bookerEmail: "",
+            time: "20:00",
+            disabled: false,
         },
     ];
     const [date, setDate] = useState(new Date());
@@ -353,82 +111,127 @@ export default SelectTimeScreen = (props) => {
     const fetchBookingTimings = async (date) => {
         const startTime = date.getTime();
         const endTime = startTime + 86400000;
+        console.log("accessToken:" + accessToken);
         var myHeaders = new Headers();
-        console.log(accessToken);
-        myHeaders.append("Authorization", "Bearer " + accessToken);
+        myHeaders.append(
+            "Accept",
+            "application/json, text/javascript, */*; q=0.01"
+        );
+        myHeaders.append("Accept-Language", "en-GB,en;q=0.9");
+        myHeaders.append("Connection", "keep-alive");
+        myHeaders.append("Cookie", "nuspw=" + accessToken);
+        myHeaders.append("Sec-Fetch-Dest", "empty");
+        myHeaders.append("Sec-Fetch-Mode", "cors");
+        myHeaders.append("Sec-Fetch-Site", "same-origin");
+        myHeaders.append(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+        );
+        myHeaders.append("X-Requested-With", "XMLHttpRequest");
+        myHeaders.append(
+            "sec-ch-ua",
+            '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"'
+        );
+        myHeaders.append("sec-ch-ua-mobile", "?0");
+        myHeaders.append("sec-ch-ua-platform", '"Windows"');
 
         var requestOptions = {
             method: "GET",
             headers: myHeaders,
             redirect: "follow",
         };
-        const fetchURL =
-            "https://treeckle.com/api/bookings/?end_date_time=" +
-            endTime +
-            "&start_date_time=" +
-            startTime +
-            "&statuses=APPROVED,PENDING&venue_id=12";
 
-        await fetch(fetchURL, requestOptions)
-            .then((response) => {
-                return response.json();
-            })
-            .then((result) => {
-                if (result.code == "token_not_valid") {
-                    alert(
-                        "Your session has timed out. Please login to Treeckle again!"
-                    );
-                    navigation.navigate("TreeckleVerificationScreen");
-                }
-                if (result.length !== 0) {
-                    result.forEach((booking) => {
-                        const title = booking.title;
-                        const bookingStartTimeEpoch = booking.startDateTime;
-                        const bookingEndTimeEpoch = booking.endDateTime;
-                        const bookerName = booking.booker.name;
+        // fetch(
+        //     "https://reboks.nus.edu.sg/nus_public_web/public//facilities/ajax/getTimeslots?activity_id=57&venue_id=13&date=2022-07-19&time_from=1658073600",
+        //     requestOptions
+        // )
+        //     .then((response) => response.text())
+        //     .then((result) => {
+        //         var list = [];
+        //         const data = JSON.parse(result);
+        //         const $ = cheerio.load(data);
+        //         var bookingSlots = $('div[class="row timeslot-grid"]')
+        //             .find("div")
+        //             .each(function (index, element) {
+        //                 // console.log($(element));
+        //                 console.log(index);
+        //                 var bookingData = $(element);
+        //                 var value = bookingData
+        //                     .children()
+        //                     .attr("value")
+        //                     .split(";");
+        //                 var bookingUnit = value[0];
+        //                 var slotAvailability = bookingData
+        //                     .children()
+        //                     .attr("disabled");
+        //                 var startTime = value[3];
+        //                 var endTime = value[4];
+        //             });
+        //     })
+        //     .catch((error) => console.log("error", error));
+        setBookingData(bookingTemplate);
+        setDoneLoading(true);
+        console.log("set");
+        // await fetch(fetchURL, requestOptions)
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((result) => {
+        //         if (result.code == "token_not_valid") {
+        //             alert(
+        //                 "Your session has timed out. Please login to Treeckle again!"
+        //             );
+        //             navigation.navigate("TreeckleVerificationScreen");
+        //         }
+        //         if (result.length !== 0) {
+        //             result.forEach((booking) => {
+        //                 const title = booking.title;
+        //                 const bookingStartTimeEpoch = booking.startDateTime;
+        //                 const bookingEndTimeEpoch = booking.endDateTime;
+        //                 const bookerName = booking.booker.name;
 
-                        var bookingStartTime = new Date(0);
-                        bookingStartTime.setUTCMilliseconds(
-                            bookingStartTimeEpoch
-                        );
-                        var bookingEndTime = new Date(0);
-                        bookingEndTime.setUTCMilliseconds(bookingEndTimeEpoch);
-                        const bookingTimeLocalStart =
-                            String(bookingStartTime.getHours()) +
-                            String(bookingStartTime.getMinutes()).padStart(
-                                2,
-                                "0"
-                            );
-                        const bookingTimeLocalEnd =
-                            String(bookingEndTime.getHours()) +
-                            String(bookingEndTime.getMinutes()).padStart(
-                                2,
-                                "0"
-                            );
-                        console.log(bookingTimeLocalStart);
-                        const testArray = [...bookingTemplate];
-                        bookingTemplate.forEach((item, index) => {
-                            // if (item.time == bookingTimeLocalStart) {
-                            //     console.log("timing matched");
-                            //     console.log(title);
-                            //     testArray[index].title = title;
-                            // }
-                            if (
-                                item.time >= parseInt(bookingTimeLocalStart) &&
-                                item.time <= parseInt(bookingTimeLocalEnd)
-                            ) {
-                                testArray[index].title = title;
-                            }
-                            setBookingData(testArray);
-                        });
-                        setDoneLoading(true);
-                    });
-                } else {
-                    setBookingData(bookingTemplate);
-                    setDoneLoading(true);
-                }
-            })
-            .catch((error) => console.log("error", error));
+        //                 var bookingStartTime = new Date(0);
+        //                 bookingStartTime.setUTCMilliseconds(
+        //                     bookingStartTimeEpoch
+        //                 );
+        //                 var bookingEndTime = new Date(0);
+        //                 bookingEndTime.setUTCMilliseconds(bookingEndTimeEpoch);
+        //                 const bookingTimeLocalStart =
+        //                     String(bookingStartTime.getHours()) +
+        //                     String(bookingStartTime.getMinutes()).padStart(
+        //                         2,
+        //                         "0"
+        //                     );
+        //                 const bookingTimeLocalEnd =
+        //                     String(bookingEndTime.getHours()) +
+        //                     String(bookingEndTime.getMinutes()).padStart(
+        //                         2,
+        //                         "0"
+        //                     );
+        //                 console.log(bookingTimeLocalStart);
+        //                 const testArray = [...bookingTemplate];
+        //                 bookingTemplate.forEach((item, index) => {
+        //                     // if (item.time == bookingTimeLocalStart) {
+        //                     //     console.log("timing matched");
+        //                     //     console.log(title);
+        //                     //     testArray[index].title = title;
+        //                     // }
+        //                     if (
+        //                         item.time >= parseInt(bookingTimeLocalStart) &&
+        //                         item.time <= parseInt(bookingTimeLocalEnd)
+        //                     ) {
+        //                         testArray[index].title = title;
+        //                     }
+        //                     setBookingData(testArray);
+        //                 });
+        //                 setDoneLoading(true);
+        //             });
+        //         } else {
+        //             setBookingData(bookingTemplate);
+        //             setDoneLoading(true);
+        //         }
+        //     })
+        //     .catch((error) => console.log("error", error));
     };
 
     useEffect(() => {
@@ -488,9 +291,8 @@ export default SelectTimeScreen = (props) => {
     const renderBooking = ({ item }) => {
         return (
             <BookingTiming
-                disabled={item.title != "" ? true : false}
+                disabled={item.disabled == true ? true : false}
                 onPress={() => {
-                    // var userSelectedTimings = ["0700", "0730"];
                     if (selectedTiming.includes(item.time)) {
                         setSelectedTiming(
                             selectedTiming.filter(
@@ -512,9 +314,9 @@ export default SelectTimeScreen = (props) => {
                     selectedTiming.includes(item.time) ? "green" : "#D9D9D9"
                 }
                 time={item.time}
-                title={item.title}
-                bookerName={item.bookerName}
-                bookerEmail={item.bookerEmail}
+                // title={item.title}
+                // bookerName={item.bookerName}
+                // bookerEmail={item.bookerEmail}
             />
         );
     };
@@ -594,7 +396,12 @@ export default SelectTimeScreen = (props) => {
             <TouchableOpacity
                 style={styles.continueButton}
                 onPress={() => {
-                    console.log(selectedTiming.sort());
+                    navigation.navigate("ConfirmBookingScreen", {
+                        iconName: props.route.params.iconName,
+                        activityName: props.route.params.activityName,
+                        date: date.toDateString(),
+                        timeslots: selectedTiming,
+                    });
                 }}
             >
                 <Text style={styles.continueButtonText}>Continue</Text>

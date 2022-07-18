@@ -11,7 +11,7 @@ export default SelectActivityScreen = (props) => {
             <View style={styles.activityRow}>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "table-tennis",
                             activityName: "Table Tennis",
                             accessToken: accessToken,
@@ -25,7 +25,7 @@ export default SelectActivityScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "volleyball",
                             activityName: "Volleyball",
                             accessToken: accessToken,
@@ -39,7 +39,7 @@ export default SelectActivityScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "basketball",
                             activityName: "Basketball",
                             accessToken: accessToken,
@@ -55,7 +55,7 @@ export default SelectActivityScreen = (props) => {
             <View style={styles.activityRow}>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "badminton",
                             activityName: "Badminton",
                             accessToken: accessToken,
@@ -69,7 +69,7 @@ export default SelectActivityScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "tennis",
                             activityName: "Squash",
                             accessToken: accessToken,
@@ -80,7 +80,7 @@ export default SelectActivityScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("SelectTimeScreen", {
+                        navigation.navigate("SelectTimeScreenReboks", {
                             iconName: "tennis-ball",
                             activityName: "Tennis",
                             accessToken: accessToken,

@@ -69,7 +69,7 @@ export default HomeScreen = () => {
             console.log(user.id);
             let { data, error, status } = await supabase
                 .from("bookings")
-                .select(`title,start_time,end_time,date,location`)
+                .select(`title,start_time,end_time,date,location,type`)
                 .eq("user_id", user.id);
 
             if (data) {
@@ -116,21 +116,35 @@ export default HomeScreen = () => {
         getFavourites();
     }, []);
     const renderBooking = ({ item }) => {
-        const eventStart = new Date(item.start_time);
-        const eventEnd = new Date(item.end_time);
-        return (
-            <UserBooking
-                dateDay={eventStart.getDate()}
-                dateMonth={monthConverter[eventStart.getMonth()]}
-                title={item.title}
-                descriptionTime={
-                    eventStart.toLocaleTimeString() +
-                    " - " +
-                    eventEnd.toLocaleTimeString()
-                }
-                descriptionLocation={item.location}
-            />
-        );
+        if (item.type == "non-reboks") {
+            const eventStart = new Date(item.start_time);
+            const eventEnd = new Date(item.end_time);
+            return (
+                <UserBooking
+                    dateDay={eventStart.getDate()}
+                    dateMonth={monthConverter[eventStart.getMonth()]}
+                    title={item.title}
+                    descriptionTime={
+                        eventStart.toLocaleTimeString() +
+                        " - " +
+                        eventEnd.toLocaleTimeString()
+                    }
+                    descriptionLocation={item.location}
+                />
+            );
+        } else {
+            console.log("reboks booking");
+            var eventDate = new Date(item.date);
+            console.log(eventDate);
+            return (
+                <UserBooking
+                    dateDay={eventDate.getDate()}
+                    dateMonth={monthConverter[eventDate.getMonth()]}
+                    title={item.title}
+                    descriptionTime={item.start_time}
+                />
+            );
+        }
     };
 
     const renderCapacity = ({ item }) => (

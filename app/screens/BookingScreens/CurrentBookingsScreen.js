@@ -65,76 +65,152 @@ export default CurrentBookingsScreen = () => {
             console.log(data);
             getBookings();
         };
-        return (
-            <View>
-                <TouchableOpacity onPress={toggleOverlay}>
-                    <MainUserBooking
-                        date={eventStart.toLocaleDateString()}
-                        title={item.title}
-                        descriptionTime={
-                            eventStart.toLocaleTimeString() +
-                            " " +
-                            eventEnd.toLocaleTimeString()
-                        }
-                        descriptionLocation={item.location}
-                        start_time={item.start_time}
-                        end_time={item.end_time}
-                    />
-                </TouchableOpacity>
-                <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <View style={styles.container}>
-                        <Text style={styles.eventHeaderText}>{item.title}</Text>
-                        <View style={styles.eventMainDetailsContainer}>
-                            <View style={styles.eventDetailsWrapper}>
-                                <MaterialCommunityIcons
-                                    name="calendar"
-                                    color={"#0C3370"}
-                                    size={20}
-                                />
-                                <Text style={styles.eventDetailsText}>
-                                    {item.start_time.slice(0, 15)}
-                                </Text>
-                            </View>
-                            <View style={styles.eventDetailsWrapper}>
-                                <MaterialCommunityIcons
-                                    name="clock"
-                                    color={"#0C3370"}
-                                    size={20}
-                                />
-                                <Text style={styles.eventDetailsText}>
-                                    {eventStart.toLocaleTimeString() +
-                                        " - " +
-                                        eventEnd.toLocaleTimeString()}
-                                </Text>
-                            </View>
-                            <View style={styles.eventDetailsWrapper}>
-                                <MaterialCommunityIcons
-                                    name="map-marker"
-                                    color={"#0C3370"}
-                                    size={20}
-                                />
-                                <Text style={styles.eventDetailsText}>
-                                    {item.location}
-                                </Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                console.log("deleting event");
-                                deleteEvent();
-                                toggleOverlay();
-                            }}
-                        >
-                            <Text style={styles.buttonText}>
-                                Delete event from calendar
+        if (item.type == "non-reboks") {
+            return (
+                <View>
+                    <TouchableOpacity onPress={toggleOverlay}>
+                        <MainUserBooking
+                            date={eventStart.toLocaleDateString()}
+                            title={item.title}
+                            descriptionTime={
+                                eventStart.toLocaleTimeString() +
+                                " " +
+                                eventEnd.toLocaleTimeString()
+                            }
+                            descriptionLocation={item.location}
+                            start_time={item.start_time}
+                            end_time={item.end_time}
+                        />
+                    </TouchableOpacity>
+                    <Overlay
+                        isVisible={visible}
+                        onBackdropPress={toggleOverlay}
+                    >
+                        <View style={styles.container}>
+                            <Text style={styles.eventHeaderText}>
+                                {item.title}
                             </Text>
-                        </TouchableOpacity>
-                    </View>
-                </Overlay>
-            </View>
-        );
+                            <View style={styles.eventMainDetailsContainer}>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="calendar"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {item.start_time}
+                                    </Text>
+                                </View>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="clock"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {eventStart.toLocaleTimeString() +
+                                            " - " +
+                                            eventEnd.toLocaleTimeString()}
+                                    </Text>
+                                </View>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="map-marker"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {item.location}
+                                    </Text>
+                                </View>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    console.log("deleting event");
+                                    deleteEvent();
+                                    toggleOverlay();
+                                }}
+                            >
+                                <Text style={styles.buttonText}>
+                                    Delete event from calendar
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Overlay>
+                </View>
+            );
+        } else {
+            return (
+                <View>
+                    <TouchableOpacity onPress={toggleOverlay}>
+                        <MainUserBooking
+                            start_time={item.date}
+                            title={item.title}
+                            descriptionTime={item.start_time}
+                        />
+                    </TouchableOpacity>
+                    <Overlay
+                        isVisible={visible}
+                        onBackdropPress={toggleOverlay}
+                    >
+                        <View style={styles.container}>
+                            <Text style={styles.eventHeaderText}>
+                                {item.title}
+                            </Text>
+                            <View style={styles.eventMainDetailsContainer}>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="calendar"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {item.date}
+                                    </Text>
+                                </View>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="clock"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {item.start_time}
+                                    </Text>
+                                </View>
+                                <View style={styles.eventDetailsWrapper}>
+                                    <MaterialCommunityIcons
+                                        name="map-marker"
+                                        color={"#0C3370"}
+                                        size={20}
+                                    />
+                                    <Text style={styles.eventDetailsText}>
+                                        {item.location == null
+                                            ? "Not available"
+                                            : item.location}
+                                    </Text>
+                                </View>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    console.log("deleting event");
+                                    deleteEvent();
+                                    toggleOverlay();
+                                }}
+                            >
+                                <Text style={styles.buttonText}>
+                                    Delete event from calendar
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Overlay>
+                </View>
+            );
+        }
     };
+
     async function getBookings() {
         try {
             setLoading(true);
@@ -142,7 +218,7 @@ export default CurrentBookingsScreen = () => {
             console.log(user.id);
             let { data, error, status } = await supabase
                 .from("bookings")
-                .select(`title,start_time,end_time,date,location`)
+                .select(`title,start_time,end_time,date,location,type`)
                 .eq("user_id", user.id);
 
             if (data) {
