@@ -187,6 +187,7 @@ export default ConfirmBookingScreen = (props) => {
                         props.route.params.date
                     );
                     alert("Booking has been added to your calendar.");
+                    navigation.navigate("CurrentBookingsScreen");
                 }}
             >
                 <Text style={styles.continueButtonText}>Confirm Booking</Text>
