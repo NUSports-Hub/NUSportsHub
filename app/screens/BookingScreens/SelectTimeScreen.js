@@ -594,7 +594,12 @@ export default SelectTimeScreen = (props) => {
             <TouchableOpacity
                 style={styles.continueButton}
                 onPress={() => {
-                    console.log(selectedTiming.sort());
+                    navigation.navigate("ConfirmBookingScreen", {
+                        iconName: props.route.params.iconName,
+                        activityName: props.route.params.activityName,
+                        date: date.toDateString(),
+                        timeslots: selectedTiming,
+                    });
                 }}
             >
                 <Text style={styles.continueButtonText}>Continue</Text>
