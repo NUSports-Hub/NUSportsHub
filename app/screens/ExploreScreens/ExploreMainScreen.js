@@ -60,10 +60,13 @@ export default ExploreMainScreen = () => {
                     style={styles.searchBar}
                     placeholder="Search Events"
                     placeholderTextColor={"black"}
+                    onChangeText={(text) => {
+                        //setData(UserEvent.name.includes(text))
+                    }}
                 />
                 <TouchableOpacity
                     onPress={() => {
-                        setData(eventList.slice(1, 3));
+                        //setData(eventList.slice(1, 3));
                     }}
                 >
                     <MaterialCommunityIcons
