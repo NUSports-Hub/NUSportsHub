@@ -93,6 +93,7 @@ export default ExploreMainScreen = () => {
                         renderItem={renderEvent}
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
+                        
                     />
                 ) : (
                     <View style={styles.loading}>
