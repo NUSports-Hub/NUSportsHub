@@ -11,7 +11,7 @@ export default MainUserBooking = (props) => {
             <View style={styles.bookingContainer}>
                 <View style={styles.bookingDateTimeWrapper}>
                     <Text style={styles.bookingText}>
-                        {props.start_time.slice(0, 15)}
+                        {props.start_time}
                     </Text>
                     <Text style={[styles.bookingText, { color: "#6b6b6b" }]}>
                         {props.descriptionTime}

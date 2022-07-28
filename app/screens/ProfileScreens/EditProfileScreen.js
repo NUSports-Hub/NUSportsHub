@@ -12,6 +12,7 @@ import { supabase } from "../../../supabase";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import "react-native-url-polyfill/auto";
+import * as Animatable from "react-native-animatable";
 import ProfileScreen from "./ProfileScreen";
 
 const { width, height } = Dimensions.get("window");
@@ -22,6 +23,7 @@ export default EditProfileScreen = () => {
     const [email, setEmail] = useState("");
     const [nusid, setNusid] = useState("");
     const [bio, setBio] = useState("");
+    const [errorMessage, setErrorMessage] = useState("")
     async function getProfile() {
         try {
             setLoading(true);
@@ -95,6 +97,7 @@ export default EditProfileScreen = () => {
                         placeholder="Name"
                         value={username}
                         onChangeText={(text) => setUsername(text)}
+                        maxLength={20}
                     />
                     <Text>NUS ID:</Text>
                     <TextInput
@@ -102,6 +105,7 @@ export default EditProfileScreen = () => {
                         placeholder="NUS ID"
                         value={nusid}
                         onChangeText={(text) => setNusid(text)}
+                        maxLength={8}
                     />
                     <Text>Email:</Text>
                     <TextInput
@@ -109,6 +113,7 @@ export default EditProfileScreen = () => {
                         placeholder="Email"
                         value={email}
                         onChangeText={(text) => setEmail(text)}
+                        maxLength={50}
                     />
                     <Text>Biography:</Text>
                     <TextInput
@@ -116,14 +121,26 @@ export default EditProfileScreen = () => {
                         placeholder="Bio"
                         value={bio}
                         onChangeText={(text) => setBio(text)}
+                        maxLength={200}
                     />
+                </View>
+                <View>
+                    {errorMessage ? (
+                        <Animatable.Text animation="shake" style={styles.errorText}>
+                            {errorMessage}
+                        </Animatable.Text>
+                    ) : null}
                 </View>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        updateProfile({ username, nusid, email, bio });
-                        // how to make the update refelcted in profile screen in real time
-                        navigation.navigate("ProfileScreen");
+                        if (email.includes("@")) {
+                            updateProfile({ username, nusid, email, bio });
+                            navigation.navigate("ProfileScreen");
+                        } else {
+                            setErrorMessage("");
+                            setErrorMessage("Please input a valid email");
+                        }
                     }}
                 >
                     <Text style={styles.buttonText}>Save Changes</Text>
@@ -166,5 +183,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "space-around",
         alignItems: "center",
+    },
+    errorText: {
+        fontFamily: "Montserrat-SemiBold",
+        color: "red",
+        marginTop: 10,
+        paddingHorizontal: 40,
     },
 });
